@@ -10,7 +10,7 @@ def index(request):
     context = {
         "latest_question_list": latest_question_list,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, "aplicacao/index.html")
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
