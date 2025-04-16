@@ -1,12 +1,25 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from .forms import LoginForm
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as loginAuth
 from django.contrib.auth.models import User as Userdata
+import socket
+
+
+PORT = 55261
+def sendstr(data):       
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((socket.gethostbyname(socket.gethostname()), PORT))
+        s.sendall(str.encode(data))
+        data = s.recv(2024)
+        s.shutdown(socket.SHUT_RDWR)
+        s.close()
+        return data.decode()
+
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
@@ -35,11 +48,31 @@ def login(request):
     else:
         form = LoginForm(data=request.POST)
         if form.is_valid():
-            Userdata.objects.aget_or_create
+            user = False
             username = request.POST.get('usuário')
             password = request.POST.get('senha')
-            user = authenticate(username= username, password= password)
-
+            data = ""
+            try:
+                data = sendstr("LOGIN,=" + username + ",=" + password)
+                print(data)
+                if data == "YES":
+                    try:
+                        user = authenticate(username= username, password=password)
+                        if not user:
+                            user = Userdata.objects.get(username= username)
+                            user.delete()
+                            raise
+                    except:
+                        Userdata.objects.create_user(username=username, email="9999999@gmail.com", password=password)
+                        user = authenticate(username= username, password=password)
+                    messageerror = ""
+                elif data == "NOT":
+                    messageerror = "USUÁRIO OU SENHA INVÁLIDO"
+            except Exception as error:
+                print(error)
+                messageerror = "FALHA NA CONEXÃO"
+            if messageerror != "":
+                pass
             if user:
                 loginAuth(request, user)
                 return HttpResponseRedirect(reverse('index'))
