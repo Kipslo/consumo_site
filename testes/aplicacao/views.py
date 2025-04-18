@@ -43,6 +43,7 @@ def vote(request, question_id):
     return HttpResponse("You're voting on question %s." % question_id)
 
 def login(request):
+    messageerror = ""
     if request.method != 'POST':
         form = LoginForm()
     else:
@@ -65,17 +66,14 @@ def login(request):
                     except:
                         Userdata.objects.create_user(username=username, email="9999999@gmail.com", password=password)
                         user = authenticate(username= username, password=password)
-                    messageerror = ""
                 elif data == "NOT":
                     messageerror = "USUÁRIO OU SENHA INVÁLIDO"
             except Exception as error:
                 print(error)
                 messageerror = "FALHA NA CONEXÃO"
-            if messageerror != "":
-                pass
             if user:
                 loginAuth(request, user)
                 return HttpResponseRedirect(reverse('index'))
-    context = {'form': form}
+    context = {'form': form, 'error': messageerror}
     return render(request, 'aplicacao/login.html', context)
 
