@@ -1,14 +1,20 @@
 {% extends "aplicacao/navbar.html" %}
 
+
+{% load django_bootstrap5 %}
+    
+
 {% block content %}
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        {{form.as_p}}
+    <div class="container" style="width: 400px; ">
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
 
-        <button name "submit">Entrar</button>
+            {% bootstrap_button button_type="submit" content="Entrar" %}
 
-    </form>
-    {% if error != "" %}
-        <p> {{error}} </p>
-    {% endif %}
+        </form>
+        {% if error != "" %}
+            <p> {{error}} </p>
+        {% endif %}
+    </div>
 {% endblock content %}
