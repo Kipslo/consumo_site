@@ -22,12 +22,12 @@ def sendstr(data):
 
 def index(request):
     if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("login"))
-    template = loader.get_template("aplicacao/index.html")
-    return render(request, "aplicacao/index.html")
+        return HttpResponseRedirect("login")
+    return HttpResponseRedirect("command")
 
 def command(request, number):
-    return
+    
+    return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False})
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
