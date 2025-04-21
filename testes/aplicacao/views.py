@@ -12,22 +12,23 @@ import socket
 
 PORT = 55261
 def sendstr(data):       
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((socket.gethostbyname(socket.gethostname()), PORT))
-        s.sendall(str.encode(data))
-        data = s.recv(2024)
-        s.shutdown(socket.SHUT_RDWR)
-        s.close()
-        return data.decode()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((socket.gethostbyname(socket.gethostname()), PORT))
+    s.sendall(str.encode(data))
+    data = s.recv(2024)
+    s.shutdown(socket.SHUT_RDWR)
+    s.close()
+    return data.decode()
 
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect("login")
-    return HttpResponseRedirect("command")
-
-def command(request, number):
-    
-    return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False})
+    return HttpResponseRedirect("commands")
+def command(request,number):
+    return
+def commands(request):
+    limit = int(sendstr("LIMITCOMMANDS")) + 1
+    return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False, "backname": '', "limit": range(1,limit), })
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -55,7 +56,6 @@ def login(request):
             data = ""
             try:
                 data = sendstr("LOGIN,=" + username + ",=" + password)
-                print(data)
                 if data == "YES":
                     try:
                         user = authenticate(username= username, password=password)
