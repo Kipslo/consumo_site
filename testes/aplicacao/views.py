@@ -38,6 +38,7 @@ def commands(request):
     limit = int(sendstr("LIMITCOMMANDS")) + 1
     occupied = sendstr("OPENCOMMANDS").split(",=")
     listen = []
+    print(occupied)
     for i in range(1, limit):
         if str(i) in occupied:
             print(i)
