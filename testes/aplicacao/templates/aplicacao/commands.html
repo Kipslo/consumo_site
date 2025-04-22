@@ -1,10 +1,15 @@
 {% extends "aplicacao/navbar.html" %}
 
 {% block content %}
-{% for id in limit %}
-    <button type="button">
-        <a href="{% url 'command' id %}">{{id}}</a>
-    </button>
-
+{% for command in commands %}
+    {% if command.getoccupied %}
+        <button type="button" class="btn btn-danger">
+            <a href="{% url 'command' command.getnumber %}"  style="color:#ffffff">{{command.getnumber}}</a>
+        </button>
+    {% else %}
+        <button type="button" class="btn btn-success">
+            <a href="{% url 'command' command.getnumber %}" style="color:#ffffff;">{{command.getnumber}}</a>
+        </button>
+    {% endif %}
 {% endfor %}
 {% endblock content %}

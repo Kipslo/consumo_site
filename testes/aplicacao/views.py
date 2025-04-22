@@ -24,11 +24,27 @@ def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect("login")
     return HttpResponseRedirect("commands")
-def command(request,number):
+def commandpage(request,number):
     return
 def commands(request):
+    class occupiedclass():
+        def __init__(self, number, occupied = False):
+            self.number = number
+            self.occupied = occupied
+        def getoccupied(self):
+            return self.occupied
+        def getnumber(self):
+            return self.number
     limit = int(sendstr("LIMITCOMMANDS")) + 1
-    return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False, "backname": '', "limit": range(1,limit), })
+    occupied = sendstr("OPENCOMMANDS").split(",=")
+    listen = []
+    for i in range(1, limit):
+        if str(i) in occupied:
+            print(i)
+            listen.append(occupiedclass(i, True))
+        else:
+            listen.append(occupiedclass(i))
+    return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False, "backname": '', "commands": listen})
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -44,36 +60,38 @@ def vote(request, question_id):
     return HttpResponse("You're voting on question %s." % question_id)
 
 def login(request):
-    messageerror = ""
-    if request.method != 'POST':
-        form = LoginForm()
-    else:
-        form = LoginForm(data=request.POST)
-        if form.is_valid():
-            user = False
-            username = request.POST.get('usuário')
-            password = request.POST.get('senha')
-            data = ""
-            try:
-                data = sendstr("LOGIN,=" + username + ",=" + password)
-                if data == "YES":
-                    try:
-                        user = authenticate(username= username, password=password)
-                        if not user:
-                            user = Userdata.objects.get(username= username)
-                            user.delete()
-                            raise
-                    except:
-                        Userdata.objects.create_user(username=username, email="9999999@gmail.com", password=password)
-                        user = authenticate(username= username, password=password)
-                elif data == "NOT":
-                    messageerror = "USUÁRIO OU SENHA INVÁLIDO"
-            except Exception as error:
-                print(error)
-                messageerror = "FALHA NA CONEXÃO"
-            if user:
-                loginAuth(request, user)
-                return HttpResponseRedirect(reverse('index'))
-    context = {'form': form, 'error': messageerror}
-    return render(request, 'aplicacao/login.html', context)
+    if not request.user.is_authenticated:
+        messageerror = ""
+        if request.method != 'POST':
+            form = LoginForm()
+        else:
+            form = LoginForm(data=request.POST)
+            if form.is_valid():
+                user = False
+                username = request.POST.get('usuário')
+                password = request.POST.get('senha')
+                data = ""
+                try:
+                    data = sendstr("LOGIN,=" + username + ",=" + password)
+                    if data == "YES":
+                        try:
+                            user = authenticate(username= username, password=password)
+                            if not user:
+                                user = Userdata.objects.get(username= username)
+                                user.delete()
+                                raise
+                        except:
+                            Userdata.objects.create_user(username=username, email="9999999@gmail.com", password=password)
+                            user = authenticate(username= username, password=password)
+                    elif data == "NOT":
+                        messageerror = "USUÁRIO OU SENHA INVÁLIDO"
+                except Exception as error:
+                    print(error)
+                    messageerror = "FALHA NA CONEXÃO"
+                if user:
+                    loginAuth(request, user)
+                    return HttpResponseRedirect(reverse('index'))
+        context = {'form': form, 'error': messageerror}
+        return render(request, 'aplicacao/login.html', context)
+    return HttpResponse(request, 'commands')
 

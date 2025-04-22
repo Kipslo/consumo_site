@@ -6,6 +6,6 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("login/", views.login, name="login"),
-    path("command/<int:number>/", views.command, name="command"),
+    path("command/<int:number>", views.commandpage, name="command"),
     path("commands", views.commands, name="commands")
 ]
