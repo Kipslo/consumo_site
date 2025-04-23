@@ -2,14 +2,10 @@
 
 {% block content %}
 {% for command in commands %}
-    {% if command.getoccupied %}
-        <button type="button" class="btn btn-danger">
-            <a href="{% url 'command' command.getnumber %}"  style="color:#ffffff">{{command.getnumber}}</a>
-        </button>
+    {% if command.occupied %}
+            <a href="{% url 'command' command.number %}" class="btn btn-danger btn-lg"  style="color:#ffffff; margin-top:3px">{{command.text}}</a>
     {% else %}
-        <button type="button" class="btn btn-success">
-            <a href="{% url 'command' command.getnumber %}" style="color:#ffffff;">{{command.getnumber}}</a>
-        </button>
+            <a href="{% url 'command' command.number %}"  class="btn btn-success btn-lg" style="color:#ffffff; margin-top:3px">{{command.text}}</a>
     {% endif %}
 {% endfor %}
 {% endblock content %}

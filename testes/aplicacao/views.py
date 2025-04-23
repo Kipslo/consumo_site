@@ -28,23 +28,22 @@ def commandpage(request,number):
     return
 def commands(request):
     class occupiedclass():
-        def __init__(self, number, occupied = False):
+        def __init__(self, number, text, occupied = False):
             self.number = number
             self.occupied = occupied
-        def getoccupied(self):
-            return self.occupied
-        def getnumber(self):
-            return self.number
+            self.text = text
     limit = int(sendstr("LIMITCOMMANDS")) + 1
     occupied = sendstr("OPENCOMMANDS").split(",=")
     listen = []
-    print(occupied)
+    numbers = len(str(limit - 1))
     for i in range(1, limit):
-        if str(i) in occupied:
-            print(i)
-            listen.append(occupiedclass(i, True))
+        temp = str(i)
+        if str(temp) in occupied:
+            text = ((len(str(temp)) - numbers) * -1) * "0" + f"{temp}"
+            listen.append(occupiedclass(i, text, True ))
         else:
-            listen.append(occupiedclass(i))
+            text = ((len(str(temp)) - numbers) * -1) * "0" + f"{temp}"
+            listen.append(occupiedclass(temp, text))
     return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False, "backname": '', "commands": listen})
 
 def detail(request, question_id):
