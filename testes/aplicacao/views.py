@@ -25,7 +25,23 @@ def index(request):
         return HttpResponseRedirect("login")
     return HttpResponseRedirect("commands")
 def commandpage(request,number):
-    return
+    class product():
+        def __init__(self, listen):
+            self.name = listen[0]
+            self.quantity = listen[1]
+            self.price = listen[2]
+    try:
+        clientname, idclient = sendstr("CLIENTNAME,=" + str(number)).split(",=")
+    except:
+        clientname, idclient = "VAZIO", ""
+    products = sendstr("PRODUCTSON,=" + str(number)).split(",=")
+    if products != [""]:
+        for k, i in enumerate(products):
+            products[k] = product(i.split("|"))
+        productson = True 
+    else:
+        productson = False
+    return render(request, "aplicacao/command.html", {"navname": f"comanda {number}({clientname})", "clientname": clientname, "id": idclient, "products": products, "productson": productson, "number":number})
 def commands(request):
     class occupiedclass():
         def __init__(self, number, text, occupied = False):
@@ -46,19 +62,8 @@ def commands(request):
             listen.append(occupiedclass(temp, text))
     return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False, "backname": '', "commands": listen})
 
-def detail(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, "aplicacao/detail.html", {"question": question})
-
-
-def results(request, question_id):
-    response = "You're looking at the results of question %s."
-    return HttpResponse(response % question_id)
-
-
-def vote(request, question_id):
-    return HttpResponse("You're voting on question %s." % question_id)
-
+def addproduct(request):
+    pass
 def login(request):
     if not request.user.is_authenticated:
         messageerror = ""

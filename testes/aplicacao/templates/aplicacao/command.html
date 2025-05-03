@@ -1,0 +1,23 @@
+{% extends "aplicacao/navbar.html" %}
+
+{% block content %}
+
+    <div class="container-fluid" style="height:50px ;background-color:#ccc; max-width:90%; margin-top:10px; display:flex;">
+        <div style="text-align: center; width:200px; padding:15px">produto</div>
+        <div style="text-align: center; width:200px; padding:15px">quantidade</div>
+        <div style="text-align: center; width:200px; padding:15px">preço</div>
+    </div>
+    {% if productson %}
+    {% for product in products %}
+        <div class="container-fluid" style="height:50px ;background-color:#ccc; max-width:90%; margin-top:10px; display:flex;">
+            <div style="text-align: center; width:200px; padding:15px">{{product.name}}</div>
+            <div style="text-align: center; width:200px; padding:15px">{{product.quantity}}</div>
+            <div style="text-align: center; width:200px; padding:15px">{{product.price}}</div>
+        </div>
+    {% endfor %}
+    {% endif %}
+
+    <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
+        <a class="btn btn-success btn-lg" style="max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'addproduct' number %}">Adicionar produto</a>
+    </nav>
+{% endblock %}
