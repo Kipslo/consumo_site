@@ -4,7 +4,8 @@ from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from .forms import LoginForm
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate
+from django.contrib.auth import logout as logoutAuth
 from django.contrib.auth import login as loginAuth
 from django.contrib.auth.models import User as Userdata
 import socket
@@ -25,6 +26,8 @@ def index(request):
         return HttpResponseRedirect("login")
     return HttpResponseRedirect("commands")
 def commandpage(request,number):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("login")
     class product():
         def __init__(self, listen):
             self.name = listen[0]
@@ -41,8 +44,10 @@ def commandpage(request,number):
         productson = True 
     else:
         productson = False
-    return render(request, "aplicacao/command.html", {"navname": f"comanda {number}({clientname})", "clientname": clientname, "id": idclient, "products": products, "productson": productson, "number":number})
+    return render(request, "aplicacao/command.html", {"navname": f"comanda {number}({clientname})", "clientname": clientname, "id": idclient, "products": products, "productson": productson, "number":number, "back": True, "backname": "commands"})
 def commands(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("login")
     class occupiedclass():
         def __init__(self, number, text, occupied = False):
             self.number = number
@@ -63,7 +68,9 @@ def commands(request):
     return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False, "backname": '', "commands": listen})
 
 def addproduct(request):
-    pass
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("login")
+    return render(request, "aplicacao/addproduct.html", )
 def login(request):
     if not request.user.is_authenticated:
         messageerror = ""
@@ -100,3 +107,7 @@ def login(request):
         return render(request, 'aplicacao/login.html', context)
     return HttpResponse(request, 'commands')
 
+def logout(request):
+    if request.user.is_authenticated:
+        logoutAuth(request)
+    return HttpResponseRedirect(reverse('index'))    
