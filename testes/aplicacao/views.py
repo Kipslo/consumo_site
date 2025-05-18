@@ -65,6 +65,7 @@ def commands(request):
         else:
             text = ((len(str(temp)) - numbers) * -1) * "0" + f"{temp}"
             listen.append(occupiedclass(temp, text))
+    print(listen)
     return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False, "backname": '', "commands": listen})
 
 def addproduct(request):

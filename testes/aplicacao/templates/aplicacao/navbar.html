@@ -15,14 +15,20 @@
       flex-direction: column;
       position: fixed;
       right:10px;
-      top:50px;
+      top:46px;
       background-color:#ffa837;
       border:10px;
       border-color:#ffb847
     }
-    .menu_item{
-      height:40px:
-      background-color:#ffa837:
+    .menuitem{
+      display:block;
+      height:40px;
+      border:3px solid #000;
+      background-color:#ffa837;
+      text-align:center;
+      text-decoration:none;
+      color:black;
+      margin-top:10px
     }
   </style>
 </head>
@@ -49,21 +55,15 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'commands' %}">{{navname}}</a>
         
-        <button class="" onclick="hidden_menu()">
+        <button onclick="hidden_menu()">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="menu_div">
-          <div class "menu_item"> 
-            <a class="" href="#">Action</a>
-          </div>
+          <a class="menuitem" href="#">Action</a>
 
-          <div class "menu_item"> 
-            <a class="" href="#">Another action</a>
-          </div>
+          <a class="menuitem" href="#">Another action</a>
 
-          <div class "menu_item"> 
-            <a class="" href="{% url 'logout' %}">Sair</a>
-          </div>
+          <a class="menuitem" href="{% url 'logout' %}">Sair</a>
         </div>
         
         
