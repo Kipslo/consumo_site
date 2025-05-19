@@ -17,8 +17,6 @@
       right:10px;
       top:46px;
       background-color:#ffa837;
-      border:10px;
-      border-color:#ffb847
     }
     .menuitem{
       display:block;
@@ -28,7 +26,8 @@
       text-align:center;
       text-decoration:none;
       color:black;
-      margin-top:10px
+      margin-top:-3;
+      padding-top:6px
     }
   </style>
 </head>
@@ -59,9 +58,9 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="menu_div">
-          <a class="menuitem" href="#">Action</a>
+          <a class="menuitem" href="#" style="margin-top:3px">1</a>
 
-          <a class="menuitem" href="#">Another action</a>
+          <a class="menuitem" href="#">2</a>
 
           <a class="menuitem" href="{% url 'logout' %}">Sair</a>
         </div>

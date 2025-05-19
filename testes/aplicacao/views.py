@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpRequest
 from django.template import loader
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from .forms import LoginForm
 from django.contrib.auth import authenticate
@@ -68,10 +68,6 @@ def commands(request):
     print(listen)
     return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False, "backname": '', "commands": listen})
 
-def addproduct(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect("login")
-    return render(request, "aplicacao/addproduct.html", )
 def login(request):
     if not request.user.is_authenticated:
         messageerror = ""
@@ -112,3 +108,8 @@ def logout(request):
     if request.user.is_authenticated:
         logoutAuth(request)
     return HttpResponseRedirect(reverse('index'))    
+
+def neworder(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
+    return render(request, 'aplicacao/neworder.html')
