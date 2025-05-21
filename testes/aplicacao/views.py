@@ -44,7 +44,7 @@ def commandpage(request,number):
         productson = True 
     else:
         productson = False
-    return render(request, "aplicacao/command.html", {"navname": f"comanda {number}({clientname})", "clientname": clientname, "id": idclient, "products": products, "productson": productson, "number":number, "back": True, "backname": "commands"})
+    return render(request, "aplicacao/command.html", {"navname": f"comanda {number}({clientname})", "clientname": clientname, "id": idclient, "products": products, "productson": productson, "number":number, "backname": "commands"})
 def commands(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect("login")
@@ -65,9 +65,30 @@ def commands(request):
         else:
             text = ((len(str(temp)) - numbers) * -1) * "0" + f"{temp}"
             listen.append(occupiedclass(temp, text))
-    print(listen)
-    return render(request, "aplicacao/commands.html", {"navname": "commands", "back": False, "backname": '', "commands": listen})
+    return render(request, "aplicacao/commands.html", {"navname": "commands", "backname": '', "commands": listen})
 
+def neworder(request, number):
+    class category():
+        def __init__(self, cod, name):
+            self.cod = cod
+            self.name = name
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
+    
+    pdt = sendstr("CATEGORIES").split(",=")
+    categories = []
+    empty = True
+    if pdt == ['']:
+        empty = False
+    print(pdt)
+    for i in pdt:
+        n = i.split(".=")
+        categories.append(category(n[0], n[1]))
+        print(n[0])
+        print(n[1])
+    print(empty)
+    print(categories)
+    return render(request, 'aplicacao/neworder.html', {"categories": categories, "empty": empty, "number": number, "navname":f"comanda({number})"})
 def login(request):
     if not request.user.is_authenticated:
         messageerror = ""
@@ -109,7 +130,8 @@ def logout(request):
         logoutAuth(request)
     return HttpResponseRedirect(reverse('index'))    
 
-def neworder(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('index'))
-    return render(request, 'aplicacao/neworder.html')
+def category():
+    pass
+
+def orderrevision():
+    pass
