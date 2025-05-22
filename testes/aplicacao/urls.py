@@ -10,7 +10,7 @@ urlpatterns = [
     path("commands", views.commands, name="commands"),
     path("logout/", views.logout, name="logout"),
     path("commands/<int:number>/neworder/", views.neworder, name="neworder"),
-    path("commands/<int:number>/neworder/<int:id>", views.category, name="category"),
+    path("commands/<int:number>/neworder/<int:cod>", views.category, name="category"),
     path("commands/<int:number>/neworder/revision", views.orderrevision, name="orderrevision"),
     
 ]

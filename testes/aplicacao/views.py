@@ -77,18 +77,31 @@ def neworder(request, number):
     
     pdt = sendstr("CATEGORIES").split(",=")
     categories = []
-    empty = True
+    empty = False
     if pdt == ['']:
-        empty = False
-    print(pdt)
+        empty = True
     for i in pdt:
         n = i.split(".=")
         categories.append(category(n[0], n[1]))
-        print(n[0])
-        print(n[1])
-    print(empty)
-    print(categories)
     return render(request, 'aplicacao/neworder.html', {"categories": categories, "empty": empty, "number": number, "navname":f"comanda({number})"})
+def category(request, number, cod):
+    class products():
+        def __init__(self, name, tipe, price, printer):
+            self.name = name   
+            self.tipe = tipe
+            if not "," in price:
+                price = price + ",00"
+            self.price = "R$ " + price
+            self.printer = printer
+    productscategory = sendstr(f"PRODUCTSCATEGORYID,={cod}").split(",=")
+    empty = False
+    if productscategory == [""]:
+        empty = True
+    productslist = []
+    for i in productscategory:
+        product = i.split("|")
+        productslist.append(products(product[0], product[1], product[2], product[3]))
+    return render(request, 'aplicacao/category.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})"})
 def login(request):
     if not request.user.is_authenticated:
         messageerror = ""
@@ -130,8 +143,6 @@ def logout(request):
         logoutAuth(request)
     return HttpResponseRedirect(reverse('index'))    
 
-def category():
-    pass
 
 def orderrevision():
     pass

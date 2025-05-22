@@ -1,7 +1,7 @@
 {% extends "aplicacao/navbar.html" %}
 
 {% block content %}
-{% if empty %}
+{% if not empty %}
     <div style="display:flex; align-items:center; flex-wrap: wrap; justify-content: center">
     {% for category in categories %}
         <a href="{% url 'category' number category.cod %}" style="display:flex; background-color:#ccc; color:#000; text-decoration:none; width:150px; height:100px; margin:10px; align-items:center; justify-content: center">{{category.name}}</a>
