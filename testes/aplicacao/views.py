@@ -102,6 +102,24 @@ def category(request, number, cod):
         product = i.split("|")
         productslist.append(products(product[0], product[1], product[2], product[3]))
     return render(request, 'aplicacao/category.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})"})
+def categorysizes(request, number, cod, product, printer):
+    class products():
+        def __init__(self, name, tipe, price, size):
+            self.name = name   
+            self.tipe = tipe
+            if not "," in price:
+                price = price + ",00"
+            self.price = "R$ " + price
+            self.size = size
+    sizes = sendstr(f"SIZESCATEGORYID,={product},={cod}").split(",=")
+    productslist = []
+    empty = False
+    if sizes == [""]:
+        empty = True
+    for i in sizes:
+        product = i.split("|")
+        productslist.append(products(product, "SIZE", product[1], product[0]))
+    return render(request, 'aplicacao/categorysize.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})", "printer": printer})
 def login(request):
     if not request.user.is_authenticated:
         messageerror = ""

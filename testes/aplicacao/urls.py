@@ -12,5 +12,7 @@ urlpatterns = [
     path("commands/<int:number>/neworder/", views.neworder, name="neworder"),
     path("commands/<int:number>/neworder/<int:cod>", views.category, name="category"),
     path("commands/<int:number>/neworder/revision", views.orderrevision, name="orderrevision"),
+    path("commands/<int:number>/neworder/<int:cod>/<str:product>/<str:printer>", views.categorysizes, name="categorysizes"),
+
     
 ]
