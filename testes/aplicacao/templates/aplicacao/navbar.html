@@ -8,7 +8,7 @@
     .menu_div{
       display: none;
       overflow:hidden;
-      height=0px
+      height:0px;
     }
     .menu_div.active{
       display: flex !important;
@@ -41,12 +41,12 @@
       let divmenu = document.querySelector(".menu_div")
         if (menuactive){
           console.log(divmenu);
-          divmenu.classList.remove("active")
-          menuactive = false
+          divmenu.classList.remove("active");
+          menuactive = false;
         }
-        else {;
+        else {
           console.log(divmenu);
-          divmenu.classList.add("active")
+          divmenu.classList.add("active");
           menuactive = true;
         }
       }
@@ -72,5 +72,5 @@
     </nav>
     
   </body>
-</html>
 {% block content %}{% endblock content %}
+</html>

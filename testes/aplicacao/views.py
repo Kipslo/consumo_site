@@ -89,6 +89,7 @@ def category(request, number, cod):
         def __init__(self, name, tipe, price, printer):
             self.name = name   
             self.tipe = tipe
+            price = price.replace(".", ",")
             if not "," in price:
                 price = price + ",00"
             self.price = "R$ " + price
@@ -101,12 +102,13 @@ def category(request, number, cod):
     for i in productscategory:
         product = i.split("|")
         productslist.append(products(product[0], product[1], product[2], product[3]))
-    return render(request, 'aplicacao/category.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})"})
+    return render(request, 'aplicacao/category.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})", "cod": cod})
 def categorysizes(request, number, cod, product, printer):
     class products():
         def __init__(self, name, tipe, price, size):
             self.name = name   
             self.tipe = tipe
+            price = price.replace(".", ",")
             if not "," in price:
                 price = price + ",00"
             self.price = "R$ " + price
@@ -119,6 +121,7 @@ def categorysizes(request, number, cod, product, printer):
     for i in sizes:
         product = i.split("|")
         productslist.append(products(product, "SIZE", product[1], product[0]))
+    print(productslist)
     return render(request, 'aplicacao/categorysize.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})", "printer": printer})
 def login(request):
     if not request.user.is_authenticated:
