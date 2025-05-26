@@ -8,4 +8,8 @@
     {% endfor %}
     </div>
 {% endif %}
+    <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
+        <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'orderrevision' number %}">Revisar pedido</a>
+        
+    </nav>
 {% endblock %}

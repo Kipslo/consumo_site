@@ -68,12 +68,13 @@ def commands(request):
     return render(request, "aplicacao/commands.html", {"navname": "commands", "backname": '', "commands": listen})
 
 def neworder(request, number):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
     class category():
         def __init__(self, cod, name):
             self.cod = cod
             self.name = name
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('index'))
+    
     
     pdt = sendstr("CATEGORIES").split(",=")
     categories = []
@@ -85,6 +86,8 @@ def neworder(request, number):
         categories.append(category(n[0], n[1]))
     return render(request, 'aplicacao/neworder.html', {"categories": categories, "empty": empty, "number": number, "navname":f"comanda({number})"})
 def category(request, number, cod):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
     class products():
         def __init__(self, name, tipe, price, printer):
             self.name = name   
@@ -104,10 +107,11 @@ def category(request, number, cod):
         productslist.append(products(product[0], product[1], product[2], product[3]))
     return render(request, 'aplicacao/category.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})", "cod": cod})
 def categorysizes(request, number, cod, product, printer):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
     class products():
-        def __init__(self, name, tipe, price, size):
+        def __init__(self, name, price, size):
             self.name = name   
-            self.tipe = tipe
             price = price.replace(".", ",")
             if not "," in price:
                 price = price + ",00"
@@ -119,9 +123,8 @@ def categorysizes(request, number, cod, product, printer):
     if sizes == [""]:
         empty = True
     for i in sizes:
-        product = i.split("|")
-        productslist.append(products(product, "SIZE", product[1], product[0]))
-    print(productslist)
+        productnow = i.split("|")
+        productslist.append(products(product, productnow[1], productnow[0]))
     return render(request, 'aplicacao/categorysize.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})", "printer": printer})
 def login(request):
     if not request.user.is_authenticated:
@@ -165,5 +168,17 @@ def logout(request):
     return HttpResponseRedirect(reverse('index'))    
 
 
-def orderrevision():
-    pass
+def orderrevision(request, number):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
+    class product():
+        def __init__(self, name, tipe, price, printer):
+            self.name = name
+            self.tipe = tipe
+            self.price = price
+            self.printer = printer
+    products = []
+    products2 = request.COOKIES['products'].split("|")[0:-1]
+    for i in products2:
+        products.append(product(i[0], i[1], i[2], i[3]))
+    return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products})

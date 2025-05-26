@@ -1,0 +1,28 @@
+{% extends "aplicacao/navbar.html" %}
+{% block content %}
+    <script>
+        function getcookie(){
+            let cookies = document.cookie.split("; ")
+            for (let cookie of cookies){
+                const [name, value] = cookie.split("=")
+                if (name === "products"){
+                    let products = value.split("|")
+                    for (let i = 0; i < products.length - 1; i++){
+                        console.log(products)
+                        products[i] = products[i].split(",-")
+                    }
+                    return products
+                }
+            }
+        }
+        let productslist = getcookie()
+        let divlist = document.querySelectorAll()
+        let quantitylist = document.querySelectorAll()
+        console.log(productslist)
+    </script>
+    <div>
+        {% for product in products %}
+            
+        {% endfor %}
+    </div>
+{% endblock %}
