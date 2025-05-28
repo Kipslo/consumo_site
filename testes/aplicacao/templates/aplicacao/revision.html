@@ -16,20 +16,30 @@
             return null
 
         }
-        function addorremove1(index, qtd){
+        function addorremove1(qtd, index){
+            var quantitylist = document.querySelectorAll(".quantity")
             let products = getcookie()
+            let newProducts
             console.log(products)
-            products[index][5] = parseInt(products[index][5], 10) + qtd
+            console.log(index)
+            console.log(qtd)
+            if (qtd === 1){
+                products[index][5] = parseInt(products[index][5], 10) + 1
+            } else{
+                products[index][5] = parseInt(products[index][5], 10) - 1
+            }
+            
+            console.log(products[index][5])
+            console.log(quantitylist[index])
             quantitylist[index].textContent = products[index][5]
-            for (let i = 0; i < products.length - 1; i++){
-                console.log(products[i])
+            newProducts = newProducts + products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",- " + products[0][4] + ",-" + products[0][5] + ",-" + products[0][6]+ "|"
+            for (let i = 1; i < products.length - 1; i++){
                 newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",- " + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|"
             }
+            console.log(newProducts)
             newProducts = newProducts + products[products.length - 1] + "; path=/commands"
             document.cookie = "products=" + newProducts
         }
-        let quantitylist = document.querySelectorAll(".quantity")
-        console.log(productslist)
     </script>
     <div>
         <div style="display:flex; flex-direction: row; width: 90%; height:50px; background-color:#ccc; margin:auto; margin-bottom:5px">          
@@ -43,8 +53,8 @@
                     <p class="quantity" style="display:block; width:20%; text-align:center; height:100px; padding:15px">{{product.qtd}}</p>
                 </div>
                 <div style="display:flex; flex-direction: row; height:100px; width:100%">
-                    <button action="addorremove1(1, {{product.cod}})" style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black">Adicionar 1</button>
-                    <button action="addorremove1(-1, {{product.cod}})" style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black">diminuir 1</button>
+                    <button onclick="addorremove1(1, {{product.cod}})" style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black">Adicionar 1</button>
+                    <button onclick="addorremove1(-1, {{product.cod}})" style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black">diminuir 1</button>
                     <a style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black; cursor:pointer">Editar</a>
                     <button style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black">Excluir</button>
                 </div>

@@ -32,7 +32,7 @@
                 console.log(products.length)
                 for (let i = 0; i < products.length - 1; i++){
                     console.log(products[i])
-                    newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",- " + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|"
+                    newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|"
                 }
                 newProducts = newProducts + name + ",-" + category + ",-" + tipe + ",-" + price + ",-" + printer + ",-1" + ",-" + "|" + number + "; path=/commands";
                 document.cookie = "products=" + newProducts
