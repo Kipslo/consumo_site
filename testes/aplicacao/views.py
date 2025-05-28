@@ -174,7 +174,7 @@ def orderrevision(request, number):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
     class product():
-        def __init__(self, index, name, category, tipe, price, printer, qtd):
+        def __init__(self, index, name, category, tipe, price, printer, qtd, htmlcod):
             self.cod = index
             self.name = name
             self.category = category
@@ -182,9 +182,14 @@ def orderrevision(request, number):
             self.price = price
             self.printer = printer
             self.qtd = qtd
+            self.htmlcod = htmlcod
     products = []
     products2 = request.COOKIES['products'].split("|")[0:-1]
+    htmlcod = 0
     for j, i in enumerate(products2):
         productcookie = i.split(",-")
-        products.append(product(j, productcookie[0], productcookie[1], productcookie[2], productcookie[3], productcookie[4], productcookie[5]))
+        if productcookie[0] != "none":
+            print(productcookie[htmlcod])
+            products.append(product(j, productcookie[0], productcookie[1], productcookie[2], productcookie[3], productcookie[4], productcookie[5], htmlcod))
+            htmlcod += 1
     return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products})
