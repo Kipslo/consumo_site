@@ -8,21 +8,47 @@
                 if (name === "products"){
                     let products = value.split("|")
                     for (let i = 0; i < products.length - 1; i++){
-                        console.log(products)
                         products[i] = products[i].split(",-")
                     }
                     return products
                 }
             }
+            return null
+
         }
-        let productslist = getcookie()
-        let divlist = document.querySelectorAll()
-        let quantitylist = document.querySelectorAll()
+        function addorremove1(index, qtd){
+            let products = getcookie()
+            console.log(products)
+            products[index][5] = parseInt(products[index][5], 10) + qtd
+            quantitylist[index].textContent = products[index][5]
+            for (let i = 0; i < products.length - 1; i++){
+                console.log(products[i])
+                newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",- " + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|"
+            }
+            newProducts = newProducts + products[products.length - 1] + "; path=/commands"
+            document.cookie = "products=" + newProducts
+        }
+        let quantitylist = document.querySelectorAll(".quantity")
         console.log(productslist)
     </script>
     <div>
+        <div style="display:flex; flex-direction: row; width: 90%; height:50px; background-color:#ccc; margin:auto; margin-bottom:5px">          
+            <p style="display:block; width:80%; text-align:center">product</p>
+            <p style="display:block; width:20%; text-align:center">qtd</p>
+        </div>
         {% for product in products %}
-            
+            <div style="width: 90%;height:200px; background-color:#ccc; margin:auto; margin-bottom:5px">
+                <div style="display:flex; flex-direction: row; height:100px; width:100%">
+                    <p style="display:block; width:80%; text-align:center; height:100px; padding:15px">{{product.name}}</p>
+                    <p class="quantity" style="display:block; width:20%; text-align:center; height:100px; padding:15px">{{product.qtd}}</p>
+                </div>
+                <div style="display:flex; flex-direction: row; height:100px; width:100%">
+                    <button action="addorremove1(1, {{product.cod}})" style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black">Adicionar 1</button>
+                    <button action="addorremove1(-1, {{product.cod}})" style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black">diminuir 1</button>
+                    <a style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black; cursor:pointer">Editar</a>
+                    <button style="display:block; width:80%; text-align:center; height:100px; padding:15px; border: 3px solid black">Excluir</button>
+                </div>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

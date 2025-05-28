@@ -89,9 +89,10 @@ def category(request, number, cod):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
     class products():
-        def __init__(self, name, tipe, price, printer):
+        def __init__(self, name, cod, tipe, price, printer):
             self.name = name   
             self.tipe = tipe
+            self.category = cod
             price = price.replace(".", ",")
             if not "," in price:
                 price = price + ",00"
@@ -104,15 +105,16 @@ def category(request, number, cod):
     productslist = []
     for i in productscategory:
         product = i.split("|")
-        productslist.append(products(product[0], product[1], product[2], product[3]))
+        productslist.append(products(product[0], cod, product[1], product[2], product[3]))
     return render(request, 'aplicacao/category.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})", "cod": cod})
 def categorysizes(request, number, cod, product, printer):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
     class products():
-        def __init__(self, name, price, size):
+        def __init__(self, name, cod, price, size):
             self.name = name   
             price = price.replace(".", ",")
+            self.category = cod
             if not "," in price:
                 price = price + ",00"
             self.price = "R$ " + price
@@ -124,7 +126,7 @@ def categorysizes(request, number, cod, product, printer):
         empty = True
     for i in sizes:
         productnow = i.split("|")
-        productslist.append(products(product, productnow[1], productnow[0]))
+        productslist.append(products(product, cod, productnow[1], productnow[0]))
     return render(request, 'aplicacao/categorysize.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})", "printer": printer})
 def login(request):
     if not request.user.is_authenticated:
@@ -172,13 +174,17 @@ def orderrevision(request, number):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
     class product():
-        def __init__(self, name, tipe, price, printer):
+        def __init__(self, index, name, category, tipe, price, printer, qtd):
+            self.cod = index
             self.name = name
+            self.category = category
             self.tipe = tipe
             self.price = price
             self.printer = printer
+            self.qtd = qtd
     products = []
     products2 = request.COOKIES['products'].split("|")[0:-1]
-    for i in products2:
-        products.append(product(i[0], i[1], i[2], i[3]))
+    for j, i in enumerate(products2):
+        productcookie = i.split(",-")
+        products.append(product(j, productcookie[0], productcookie[1], productcookie[2], productcookie[3], productcookie[4], productcookie[5]))
     return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products})
