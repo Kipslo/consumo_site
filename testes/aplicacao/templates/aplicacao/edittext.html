@@ -1,0 +1,46 @@
+{% extends "aplicacao/navbar.html" %}
+{% block content %}
+<script>
+    function getproducts(){
+            let cookies = document.cookie.split("; ")
+            for (let cookie of cookies){
+                const [name, value] = cookie.split("=")
+                if (name === "products"){
+                    let products = value.split("|")
+                    for (let i = 0; i < products.length - 1; i++){
+                        console.log(products)
+                        products[i] = products[i].split(",-")
+                    }
+                    return products
+                }
+            }
+            return null
+    }
+    function addremovetext(text, index){
+
+
+
+
+    }
+</script>
+<div style="display:flex; align-items:center; flex-wrap: wrap; justify-content: center">
+    {% for predeftext in predeftexts %}
+        {% if predeftext.active %}
+            <div style="width: 90%;height:200px; background-color:#ccc; margin:auto; margin-bottom:5px">
+                <h2><h2>
+                
+            </div>
+        {% else %}
+            <div>
+                <h2 style="display:block; width:75%"><h2>
+                <button style></button>    
+                
+                </div style="width: 90%;height:200px; background-color:#ccc; margin:auto; margin-bottom:5px">
+        {% endif %}
+    {% endfor %}
+</div>
+<nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
+    <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'orderrevision' number %}">Voltar</a>
+        
+</nav>
+{% endblock %}

@@ -192,4 +192,29 @@ def orderrevision(request, number):
             print(productcookie[htmlcod])
             products.append(product(j, productcookie[0], productcookie[1], productcookie[2], productcookie[3], productcookie[4], productcookie[5], htmlcod))
             htmlcod += 1
-    return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products})
+    return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products, "number":number})
+
+def edittext(request, number, index):
+    class text():
+        def __init__(self, value, active = False):
+            self.text = value
+            self.active = active
+        def test(self, newtext):
+            if self.text == newtext:
+                self.active = True
+                return True
+            return False
+    product = request.COOKIES['products'].split("|")[index].split(",-")
+    predefnotes = sendstr(f"GETNOTES,={product[1]}").split(".=")
+    product[-1] = product[-1].split("\\")
+    texts = []
+    predeftexts = []
+    for n in predefnotes:
+        predeftexts.append(text(n))        
+    for j in product[-1]:
+        active = False
+        for n in predeftexts:
+            if not n.test(j):
+                texts.append(text(j))
+
+    return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts})
