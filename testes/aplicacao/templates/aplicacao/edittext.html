@@ -30,15 +30,9 @@
     {% for predeftext in predeftexts %}
         {% if predeftext.active %}
             <div class="" style="width: 90%;height:200px; background-color:#ccc; margin:auto; margin-bottom:5px">
-                <h2><h2>
-                <imput type="checkbox" onchange="changetext('{{predeftext.text}}', '{{}}')">
+                <h2>{{predeftext.text}}<h2>
+                <imput type="checkbox" onchange="changetext('{{predeftext.text}}', '{{predeftext.cod}}')">
             </div>
-        {% else %}
-            <div>
-                <h2 style="display:block; width:75%"><h2>
-                <button style></button>    
-                
-                </div style="width: 90%;height:200px; background-color:#ccc; margin:auto; margin-bottom:5px">
         {% endif %}
     {% endfor %}
     <div>

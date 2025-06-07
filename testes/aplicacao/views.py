@@ -195,9 +195,10 @@ def orderrevision(request, number):
 
 def edittext(request, number, index):
     class text():
-        def __init__(self, value, active = False):
+        def __init__(self, value, active = False, index = -1):
             self.text = value
             self.active = active
+            self.cod = index
         def test(self, newtext):
             if self.text == newtext:
                 self.active = True
@@ -210,8 +211,8 @@ def edittext(request, number, index):
     product[-1] = product[-1].split("\\")
     texts = []
     predeftexts = []
-    for n in predefnotes:
-        predeftexts.append(text(n))        
+    for m, n in enumerate(predefnotes):
+        predeftexts.append(text(n, index = m))
     for j in product[-1]:
         active = False
         num = True

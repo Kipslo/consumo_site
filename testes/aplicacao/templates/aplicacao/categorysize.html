@@ -22,7 +22,8 @@
             let products = getproducts()
             let newProducts = ""
             console.log(products)
-            if (products === null){-=" + "|" + number + "; path=/commands";
+            if (products === null){
+                document.cookie = "products=" + name + ",-" + category + ",-" + "SIZE" + ",-" + price + ",-" + printer + ",-1" + ",-"  + "|" + number + "; path=/commands";
             } else {
                 if (products[products.length - 1] != number){
                     document.cookie = "products=" + name + ",-" + category + ",-" + "SIZE" + ",-" + price + ",-" + printer + ",-1" + ",-"  + "|" + number + "; path=/commands";
