@@ -189,7 +189,6 @@ def orderrevision(request, number):
     for j, i in enumerate(products2):
         productcookie = i.split(",-")
         if productcookie[0] != "none":
-            print(productcookie[htmlcod])
             products.append(product(j, productcookie[0], productcookie[1], productcookie[2], productcookie[3], productcookie[4], productcookie[5], htmlcod))
             htmlcod += 1
     return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products, "number":number})
@@ -204,8 +203,10 @@ def edittext(request, number, index):
                 self.active = True
                 return True
             return False
+    print()
     product = request.COOKIES['products'].split("|")[index].split(",-")
-    predefnotes = sendstr(f"GETNOTES,={product[1]}").split(".=")
+    print(product)
+    predefnotes = sendstr(f"GETNOTESID,={product[1]}").split(".=")
     product[-1] = product[-1].split("\\")
     texts = []
     predeftexts = []
@@ -213,8 +214,12 @@ def edittext(request, number, index):
         predeftexts.append(text(n))        
     for j in product[-1]:
         active = False
+        num = True
         for n in predeftexts:
-            if not n.test(j):
+            if not n.test(j) and j != "" and num:
                 texts.append(text(j))
-
+                num = False 
+    print(predefnotes)
+    print(predeftexts)
+    print(texts)
     return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts})

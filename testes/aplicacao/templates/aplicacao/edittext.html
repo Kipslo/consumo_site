@@ -22,13 +22,16 @@
 
 
     }
+    function changetext(text, index){
+
+    }
 </script>
 <div style="display:flex; align-items:center; flex-wrap: wrap; justify-content: center">
     {% for predeftext in predeftexts %}
         {% if predeftext.active %}
-            <div style="width: 90%;height:200px; background-color:#ccc; margin:auto; margin-bottom:5px">
+            <div class="" style="width: 90%;height:200px; background-color:#ccc; margin:auto; margin-bottom:5px">
                 <h2><h2>
-                
+                <imput type="checkbox" onchange="changetext('{{predeftext.text}}', '{{}}')">
             </div>
         {% else %}
             <div>
@@ -38,6 +41,8 @@
                 </div style="width: 90%;height:200px; background-color:#ccc; margin:auto; margin-bottom:5px">
         {% endif %}
     {% endfor %}
+    <div>
+    </div>
 </div>
 <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
     <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'orderrevision' number %}">Voltar</a>
