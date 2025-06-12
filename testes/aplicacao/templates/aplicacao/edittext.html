@@ -29,8 +29,10 @@
 <div style="display:flex; align-items:center; flex-wrap: wrap; justify-content: center">
     {% for predeftext in predeftexts %}
             <div class="" style="display:flex; width: 90%;height:80px; background-color:#ccc; margin:auto; margin-bottom:5px">
-                <h2 style="display: block; height: 100%; width: 96%; padding-top:18px;">{{predeftext.text}}<h2>    
-                <form style="display: flex; justify-content: center; align-items: center; height: 80px;">
+                <div style="display:flex; height: 100%; width: auto; align-items: center;">
+                    <h2>{{predeftext.text}}</h2>    
+                </div>
+                <form style="display: flex; justify-content: center; align-items: center; height: 100%; width: 50px;">
                     <input style="width: 30px; height: 30px;" type="checkbox" onchange="changetext('{{predeftext.text}}', '{{predeftext.cod}}')"{% if predeftext.active %} checked{% endif %}>
                 </form>
             </div>
