@@ -201,18 +201,18 @@ def edittext(request, number, index):
             self.cod = index
         def test(self, newtext):
             if self.text == newtext:
+                print("foi")
                 self.active = True
                 return True
             return False
-    print()
     product = request.COOKIES['products'].split("|")[index].split(",-")
-    print(product)
     predefnotes = sendstr(f"GETNOTESID,={product[1]}").split(".=")
     product[-1] = product[-1].split("\\")
     texts = []
     predeftexts = []
-    for m, n in enumerate(predefnotes):
-        predeftexts.append(text(n, index = m))
+    if predefnotes != [""]:
+        for m, n in enumerate(predefnotes):
+            predeftexts.append(text(n, index = m))
     for j in product[-1]:
         active = False
         num = True
@@ -223,4 +223,4 @@ def edittext(request, number, index):
     print(predefnotes)
     print(predeftexts)
     print(texts)
-    return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts})
+    return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number})
