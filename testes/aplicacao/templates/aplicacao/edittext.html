@@ -28,17 +28,31 @@
 </script>
 <div style="display:flex; align-items:center; flex-wrap: wrap; justify-content: center">
     {% for predeftext in predeftexts %}
-            <div class="" style="display:flex; width: 90%;height:80px; background-color:#ccc; margin:auto; margin-bottom:5px">
-                <div style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
-                    <h2>{{predeftext.text}}</h2>    
-                </div>
-                <form style="display: flex; justify-content: center; align-items: center; height: 100%; width: 50px;">
-                    <input style="width: 30px; height: 30px;" type="checkbox" onchange="changetext('{{predeftext.text}}', '{{predeftext.cod}}')"{% if predeftext.active %} checked{% endif %}>
-                </form>
-            </div>
+         <div class="" style="display:flex; width: 90%;height:80px; background-color:#ccc; margin:auto; margin-bottom:5px">
+             <div style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
+                 <h2>{{predeftext.text}}</h2>    
+             </div>
+             <form style="display: flex; justify-content: center; align-items: center; height: 100%; width: 50px;">
+                 <input style="width: 30px; height: 30px;" type="checkbox" onchange="changetext('{{predeftext.text}}', '{{predeftext.cod}}')"{% if predeftext.active %} checked{% endif %}>
+             </form>
+        </div>
     {% endfor %}
-    <div>
-    </div>
+    {% for predeftext in predeftexts %}
+        <div class="" style="display:flex; width: 90%;height:80px; background-color:#ccc; margin:auto; margin-bottom:5px">
+            <div style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
+                <h2>{{predeftext.text}}</h2>    
+            </div>
+            <button style="height: 100%; width: 90px;" onclick="">Excluir</button>
+        </div>
+    {% endfor %}
+        <div class="" style="display:flex; width: 90%;height:80px; background-color:#ccc; margin:auto; margin-bottom:5px">
+            <form style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
+                <input style="margin: 20px; flex-grow: 1">
+                    <h2>{{predeftext.text}}</h2>    
+                </input>
+            </form>
+            <button style="height: 100%; width: 90px;" onclick="">Adicionar</button>
+        </div>
 </div>
 <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
     <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'orderrevision' number %}">Voltar</a>
