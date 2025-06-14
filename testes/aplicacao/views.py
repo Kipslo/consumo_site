@@ -184,13 +184,18 @@ def orderrevision(request, number):
             self.qtd = qtd
             self.htmlcod = htmlcod
     products = []
-    products2 = request.COOKIES['products'].split("|")[0:-1]
+    try:
+        products2 = request.COOKIES['products'].split("|")[0:-1]
+    except:
+        return HttpResponseRedirect(reverse("index"))
     htmlcod = 0
     for j, i in enumerate(products2):
         productcookie = i.split(",-")
         if productcookie[0] != "none":
             products.append(product(j, productcookie[0], productcookie[1], productcookie[2], productcookie[3], productcookie[4], productcookie[5], htmlcod))
             htmlcod += 1
+    if products == []:
+        return HttpResponseRedirect(reverse('index'))
     return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products, "number":number})
 
 def edittext(request, number, index):

@@ -2,13 +2,13 @@
 {% block content %}
     <script>
         function getcookie(){
-            let cookies = document.cookie.split("; ")
+            let cookies = document.cookie.split("; ");
             for (let cookie of cookies){
-                const [name, value] = cookie.split("=")
+                const [name, value] = cookie.split("=");
                 if (name === "products"){
-                    let products = value.split("|")
+                    let products = value.split("|");
                     for (let i = 0; i < products.length - 1; i++){
-                        products[i] = products[i].split(",-")
+                        products[i] = products[i].split(",-");
                     }
                     return products
                 }
@@ -17,42 +17,43 @@
 
         };
         function listtostring(products){
-            let newProducts
-            newProducts =products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] + ",-" + products[0][6]+ "|"
+            let newProducts;
+            newProducts =products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] + ",-" + products[0][6]+ "|";
             for (let i = 1; i < products.length - 1; i++){
-                newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|"
+                newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|";
             }
-            newProducts = newProducts + products[products.length - 1] + "; path=/commands"
-            document.cookie = "products=" + newProducts
+            newProducts = newProducts + products[products.length - 1] + "; path=/commands";
+            document.cookie = "products=" + newProducts;
         };
         function addorremove1(qtd, index, htmlcod){
-            var quantitylist = document.querySelectorAll(".quantity")
-            let products = getcookie()
-            let newProducts
+            var quantitylist = document.querySelectorAll(".quantity");
+            let products = getcookie();
+            let newProducts;
             if (qtd != -1 || parseInt(products[index][5], 10) > 0){
-                products[index][5] = parseInt(products[index][5], 10) + qtd
+                products[index][5] = parseInt(products[index][5], 10) + qtd;
             }
-            quantitylist[htmlcod].textContent = products[index][5]
-            newProducts = listtostring(products)
+            quantitylist[htmlcod].textContent = products[index][5];
+            newProducts = listtostring(products);
             
         };
         function deleteproduct(index){
-            let products = getcookie()
-            let newProducts = ""
+            let products = getcookie();
+            let newProducts = "";
             if (index != 0){
-                newProducts = newProducts + products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] + ",-" + products[0][6]+ "|"
+                newProducts = newProducts + products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] + ",-" + products[0][6]+ "|";
             } else {
-                newProducts = "none|" 
+                newProducts = "none|" ;
             }
             for (let i = 1; i < products.length - 1; i++){
                 if (i != index){
-                    newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|"
+                    newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|";
                 } else {
-                    newProducts = newProducts + "none|"
+                    newProducts = newProducts + "none|";
                 }
                 }
-            newProducts = newProducts + products[products.length - 1] + "; path=/commands"
-            document.cookie = "products=" + newProducts
+            newProducts = newProducts + products[products.length - 1] + "; path=/commands";
+            document.cookie = "products=" + newProducts;
+            location.reload();
         }
     </script>
     <div>
