@@ -65,7 +65,7 @@ def commands(request):
         else:
             text = ((len(str(temp)) - numbers) * -1) * "0" + f"{temp}"
             listen.append(occupiedclass(temp, text))
-    return render(request, "aplicacao/commands.html", {"navname": "commands", "backname": '', "commands": listen})
+    return render(request, "aplicacao/commands.html", {"navname": "Comandas", "backname": '', "commands": listen})
 
 def neworder(request, number):
     if not request.user.is_authenticated:

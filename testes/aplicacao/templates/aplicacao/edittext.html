@@ -16,14 +16,15 @@
             }
             return null
     }
-    function addremovetext(text, index){
+    function addremovetext(text, index, remove = false){
         console.log(index)
 
 
-
+        location.reload();
     }
     function changetext(text, index){
         console.log(index)
+        location.reload();
     }
 </script>
 <div style="display:flex; align-items:center; flex-wrap: wrap; justify-content: center">
@@ -45,13 +46,13 @@
             <button style="height: 100%; width: 90px;" onclick="">Excluir</button>
         </div>
     {% endfor %}
-        <div class="" style="display:flex; width: 90%;height:80px; background-color:#ccc; margin:auto; margin-bottom:5px">
+        <div class="" style="display:flex; width: 90%;height:80px; background-color:#ffffff; margin:auto; margin-bottom:5px">
             <form style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
-                <input style="margin: 20px; flex-grow: 1">
+                <input style="margin-right: 10px; flex-grow: 1; height: 35px;">
                     <h2>{{predeftext.text}}</h2>    
                 </input>
             </form>
-            <button style="height: 100%; width: 90px;" onclick="">Adicionar</button>
+            <button style="height: 100%; width: 90px; height: 37px; margin-top: 21px" onclick="">Adicionar</button>
         </div>
 </div>
 <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
