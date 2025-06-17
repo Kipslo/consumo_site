@@ -212,20 +212,19 @@ def edittext(request, number, index):
             return False
     product = request.COOKIES['products'].split("|")[index].split(",-")
     predefnotes = sendstr(f"GETNOTESID,={product[1]}").split(".=")
-    product[-1] = product[-1].split("\\")
+    product[6] = product[6].split(".-")
+    print(product)
     texts = []
     predeftexts = []
     if predefnotes != [""]:
         for m, n in enumerate(predefnotes):
             predeftexts.append(text(n, index = m))
-    for j in product[-1]:
-        active = False
+    for j in product[6]:
         num = True
         for n in predeftexts:
             if not n.test(j) and j != "" and num:
                 texts.append(text(j))
-                num = False 
-    print(predefnotes)
-    print(predeftexts)
-    print(texts)
+                num = False
+    for i in texts:
+        print(i.text)
     return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number, "indexofproduct": index})

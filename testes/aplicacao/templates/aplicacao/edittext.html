@@ -3,13 +3,24 @@
 <script>
     function listtostring(products){
             let newProducts;
-            newProducts =products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] + ",-" + products[0][6]+ "|";
+            console.log(products)
+            newProducts =products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] ;
+            if (products[0][6].length === 0){
+                newProducts = newProducts + ",-|"
+            } else {
+                newProducts = newProducts + ",-" + products[0][6][0] 
+                for (let i = 1; i < products[0][6].length; i++){
+                    newProducts = newProducts + ".-" + products[0][6][i]
+                }
+                newProducts = newProducts + "|"
+            }
             for (let i = 1; i < products.length - 1; i++){
                 newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" ;
-                if (products[i][6] === "" || Array.isArray(products['{{indexofproduct}}'][6])){
-                    newProducts = newProducts + products[i][6]+ "|";
+                if (products[i][6] === "" || products[i][6].length === 0){
+                    newProducts = newProducts + "|";
                 } else {
                     newProducts = newProducts + ".-" + products[i][6][0];
+                    console.log(products[i][6].slice(1))
                     for (let producttext in products[i][6].slice(1)){
                         newProducts = newProducts + ".-" + producttext ;
                     }
@@ -35,20 +46,36 @@
             }
             return null
     }
-    function addremovetext(text = null, remove = false){
+    function addtext(){
         let listen = getproducts()
-        console.log(index)
-
+        let text = document.querySelector("#inputtext").value
+        let textlisten = []
+        for(let i = 0; i < listen['{{indexofproduct}}'][6].length; i++){
+            
+            if (text !== listen['{{indexofproduct}}'][6][i] && listen['{{indexofproduct}}'][6][i] !== ""){
+                textlisten.push(listen['{{indexofproduct}}'][6][i])
+            }
+        }
+        textlisten.push(text)
+        listen['{{indexofproduct}}'][6] = textlisten
         listtostring(listen)
-        location.reload();
+    }
+    function removetext(text){
+        let listen = getproducts()
+        let textlisten = []
+        for(let i = 0; i < listen['{{indexofproduct}}'][6].length; i++){
+            if (text !== listen['{{indexofproduct}}'][6][i]){
+                textlisten.push(listen['{{indexofproduct}}'][6][i])
+            }
+        }
+        listen['{{indexofproduct}}'][6] = textlisten
+        listtostring(listen)
     }
     function changetext(text, index){
         let checkbox = document.querySelectorAll(".checkbox")[index];
         let listen = getproducts();
         if (checkbox.checked){
-            console.log("adicionar")
-            console.log(listen['{{indexofproduct}}'][6])
-            if (listen['{{indexofproduct}}'][6][0] === ""){
+            if (listen['{{indexofproduct}}'][6][0] === "" || listen['{{indexofproduct}}'][6].length === 0){
                 listen['{{indexofproduct}}'][6][0] = text;
             } else {
                 listen['{{indexofproduct}}'][6].push(text);
@@ -57,7 +84,7 @@
             console.log("retirar")
             let textlisten = [];
             for(let i = 0; i < listen['{{indexofproduct}}'][6].length; i++){
-                if (text != listen['{{indexofproduct}}'][6][i]){
+                if (text !== listen['{{indexofproduct}}'][6][i]){
                     console.log(listen['{{indexofproduct}}'][6][i])
                     textlisten.push(listen['{{indexofproduct}}'][6][i]);
                 }
@@ -80,21 +107,21 @@
              </form>
         </div>
     {% endfor %}
-    {% for text in predeftexts %}
+    {% for text in texts %}
         <div class="" style="display:flex; width: 90%;height:80px; background-color:#ccc; margin:auto; margin-bottom:5px">
             <div style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
-                <h2>{{predeftext.text}}</h2>    
+                <h2>{{text.text}}</h2>    
             </div>
-            <button style="height: 100%; width: 90px;" onclick="addremovetext('{{text.text}}', true)">Excluir</button>
+            <button style="height: 100%; width: 90px;" onclick="removetext('{{text.text}}')">Excluir</button>
         </div>
     {% endfor %}
         <div class="" style="display:flex; width: 90%;height:80px; background-color:#ffffff; margin:auto; margin-bottom:5px">
             <form style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
-                <input style="margin-right: 10px; flex-grow: 1; height: 35px;">
+                <input id="inputtext" style="margin-right: 10px; flex-grow: 1; height: 35px;">
                     <h2>{{predeftext.text}}</h2>
                 </input>
             </form>
-            <button style="height: 100%; width: 90px; height: 37px; margin-top: 21px" onclick="addremovetext()">Adicionar</button>
+            <button style="height: 100%; width: 90px; height: 37px; margin-top: 21px" onclick="addtext()">Adicionar</button>
         </div>
 </div>
 <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
