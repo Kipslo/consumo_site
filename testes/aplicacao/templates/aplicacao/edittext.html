@@ -1,30 +1,72 @@
 {% extends "aplicacao/navbar.html" %}
 {% block content %}
 <script>
-    function getproducts(){
-            let cookies = document.cookie.split("; ")
-            for (let cookie of cookies){
-                const [name, value] = cookie.split("=")
-                if (name === "products"){
-                    let products = value.split("|")
-                    for (let i = 0; i < products.length - 1; i++){
-                        console.log(products)
-                        products[i] = products[i].split(",-")
+    function listtostring(products){
+            let newProducts;
+            newProducts =products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] + ",-" + products[0][6]+ "|";
+            for (let i = 1; i < products.length - 1; i++){
+                newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" ;
+                if (products[i][6] === "" || Array.isArray(products['{{indexofproduct}}'][6])){
+                    newProducts = newProducts + products[i][6]+ "|";
+                } else {
+                    newProducts = newProducts + ".-" + products[i][6][0];
+                    for (let producttext in products[i][6].slice(1)){
+                        newProducts = newProducts + ".-" + producttext ;
                     }
+                    newProducts = newProducts + "|";
+                }
+            }
+            newProducts = newProducts + products[products.length - 1] + "; path=/commands";
+            document.cookie = "products=" + newProducts;
+        };
+    function getproducts(){
+            let cookies = document.cookie.split("; ");
+            for (let cookie of cookies){
+                const [name, value] = cookie.split("=");
+                if (name === "products"){
+                    let products = value.split("|");
+                    for (let i = 0; i < products.length - 1; i++){
+                        products[i] = products[i].split(",-");
+                        products[i][6] = products[i][6].split(".-");
+                    }
+
                     return products
                 }
             }
             return null
     }
-    function addremovetext(text, index, remove = false){
+    function addremovetext(text = null, remove = false){
+        let listen = getproducts()
         console.log(index)
 
-
+        listtostring(listen)
         location.reload();
     }
     function changetext(text, index){
-        console.log(index)
-        location.reload();
+        let checkbox = document.querySelectorAll(".checkbox")[index];
+        let listen = getproducts();
+        if (checkbox.checked){
+            console.log("adicionar")
+            console.log(listen['{{indexofproduct}}'][6])
+            if (listen['{{indexofproduct}}'][6][0] === ""){
+                listen['{{indexofproduct}}'][6][0] = text;
+            } else {
+                listen['{{indexofproduct}}'][6].push(text);
+            }
+        } else {
+            console.log("retirar")
+            let textlisten = [];
+            for(let i = 0; i < listen['{{indexofproduct}}'][6].length; i++){
+                if (text != listen['{{indexofproduct}}'][6][i]){
+                    console.log(listen['{{indexofproduct}}'][6][i])
+                    textlisten.push(listen['{{indexofproduct}}'][6][i]);
+                }
+            }
+            listen['{{indexofproduct}}'][6] = textlisten
+        }
+        console.log(listen)
+        listtostring(listen)
+        
     }
 </script>
 <div style="display:flex; align-items:center; flex-wrap: wrap; justify-content: center">
@@ -34,25 +76,25 @@
                  <h2>{{predeftext.text}}</h2>    
              </div>
              <form style="display: flex; justify-content: center; align-items: center; height: 100%; width: 50px;">
-                 <input style="width: 30px; height: 30px;" type="checkbox" onchange="changetext('{{predeftext.text}}', '{{predeftext.cod}}')"{% if predeftext.active %} checked{% endif %}>
+                 <input class="checkbox" style="width: 30px; height: 30px;" type="checkbox" onchange="changetext('{{predeftext.text}}', '{{predeftext.cod}}')"{% if predeftext.active %} checked{% endif %}>
              </form>
         </div>
     {% endfor %}
-    {% for predeftext in predeftexts %}
+    {% for text in predeftexts %}
         <div class="" style="display:flex; width: 90%;height:80px; background-color:#ccc; margin:auto; margin-bottom:5px">
             <div style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
                 <h2>{{predeftext.text}}</h2>    
             </div>
-            <button style="height: 100%; width: 90px;" onclick="">Excluir</button>
+            <button style="height: 100%; width: 90px;" onclick="addremovetext('{{text.text}}', true)">Excluir</button>
         </div>
     {% endfor %}
         <div class="" style="display:flex; width: 90%;height:80px; background-color:#ffffff; margin:auto; margin-bottom:5px">
             <form style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
                 <input style="margin-right: 10px; flex-grow: 1; height: 35px;">
-                    <h2>{{predeftext.text}}</h2>    
+                    <h2>{{predeftext.text}}</h2>
                 </input>
             </form>
-            <button style="height: 100%; width: 90px; height: 37px; margin-top: 21px" onclick="">Adicionar</button>
+            <button style="height: 100%; width: 90px; height: 37px; margin-top: 21px" onclick="addremovetext()">Adicionar</button>
         </div>
 </div>
 <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">

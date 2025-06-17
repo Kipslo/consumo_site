@@ -228,4 +228,4 @@ def edittext(request, number, index):
     print(predefnotes)
     print(predeftexts)
     print(texts)
-    return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number})
+    return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number, "indexofproduct": index})
