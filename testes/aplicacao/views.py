@@ -222,9 +222,9 @@ def edittext(request, number, index):
     for j in product[6]:
         num = True
         for n in predeftexts:
-            if not n.test(j) and j != "" and num:
-                texts.append(text(j))
+            if n.test(j) or j == "":
                 num = False
-    for i in texts:
-        print(i.text)
+        if num:
+            texts.append(text(j))
+    
     return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number, "indexofproduct": index})

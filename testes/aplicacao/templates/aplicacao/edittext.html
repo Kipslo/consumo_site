@@ -16,13 +16,12 @@
             }
             for (let i = 1; i < products.length - 1; i++){
                 newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" ;
-                if (products[i][6] === "" || products[i][6].length === 0){
+                if ((products[i][6] === "" && products[i][6].length === 1)|| products[i][6].length === 0){
                     newProducts = newProducts + "|";
                 } else {
-                    newProducts = newProducts + ".-" + products[i][6][0];
-                    console.log(products[i][6].slice(1))
-                    for (let producttext in products[i][6].slice(1)){
-                        newProducts = newProducts + ".-" + producttext ;
+                    newProducts = newProducts + products[i][6][0];
+                    for (let j = 1; j < products[i][6].length; j++ ){
+                        newProducts = newProducts + ".-" +  products[i][6][j];
                     }
                     newProducts = newProducts + "|";
                 }
@@ -49,27 +48,38 @@
     function addtext(){
         let listen = getproducts()
         let text = document.querySelector("#inputtext").value
-        let textlisten = []
+        console.log(listen['{{indexofproduct}}'])
+        let textlisten = listen['{{indexofproduct}}'][6]
+        let permission = true
         for(let i = 0; i < listen['{{indexofproduct}}'][6].length; i++){
-            
-            if (text !== listen['{{indexofproduct}}'][6][i] && listen['{{indexofproduct}}'][6][i] !== ""){
-                textlisten.push(listen['{{indexofproduct}}'][6][i])
+            if (text === listen['{{indexofproduct}}'][6][i]){
+                permission = false
+                break
+            } else if (listen['{{indexofproduct}}'][6][i] === ""){
+                textlisten[i] = text
+                permission = false
+                break
             }
         }
-        textlisten.push(text)
+        if (permission){
+            textlisten.push(text);
+        }
+        console.log(textlisten)
         listen['{{indexofproduct}}'][6] = textlisten
         listtostring(listen)
+        location.reload()
     }
     function removetext(text){
         let listen = getproducts()
         let textlisten = []
         for(let i = 0; i < listen['{{indexofproduct}}'][6].length; i++){
-            if (text !== listen['{{indexofproduct}}'][6][i]){
+            if (text !== listen['{{indexofproduct}}'][6][i] && listen['{{indexofproduct}}'][6][i] !== ""){
                 textlisten.push(listen['{{indexofproduct}}'][6][i])
             }
         }
         listen['{{indexofproduct}}'][6] = textlisten
         listtostring(listen)
+        location.reload()
     }
     function changetext(text, index){
         let checkbox = document.querySelectorAll(".checkbox")[index];
@@ -81,17 +91,14 @@
                 listen['{{indexofproduct}}'][6].push(text);
             }
         } else {
-            console.log("retirar")
             let textlisten = [];
             for(let i = 0; i < listen['{{indexofproduct}}'][6].length; i++){
                 if (text !== listen['{{indexofproduct}}'][6][i]){
-                    console.log(listen['{{indexofproduct}}'][6][i])
                     textlisten.push(listen['{{indexofproduct}}'][6][i]);
                 }
             }
             listen['{{indexofproduct}}'][6] = textlisten
         }
-        console.log(listen)
         listtostring(listen)
         
     }
