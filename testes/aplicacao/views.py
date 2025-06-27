@@ -65,7 +65,7 @@ def commands(request):
         else:
             text = ((len(str(temp)) - numbers) * -1) * "0" + f"{temp}"
             listen.append(occupiedclass(temp, text))
-    return render(request, "aplicacao/commands.html", {"navname": "commands", "backname": '', "commands": listen})
+    return render(request, "aplicacao/commands.html", {"navname": "Comandas", "backname": '', "commands": listen})
 
 def neworder(request, number):
     if not request.user.is_authenticated:
@@ -184,13 +184,18 @@ def orderrevision(request, number):
             self.qtd = qtd
             self.htmlcod = htmlcod
     products = []
-    products2 = request.COOKIES['products'].split("|")[0:-1]
+    try:
+        products2 = request.COOKIES['products'].split("|")[0:-1]
+    except:
+        return HttpResponseRedirect(reverse("index"))
     htmlcod = 0
     for j, i in enumerate(products2):
         productcookie = i.split(",-")
         if productcookie[0] != "none":
             products.append(product(j, productcookie[0], productcookie[1], productcookie[2], productcookie[3], productcookie[4], productcookie[5], htmlcod))
             htmlcod += 1
+    if products == []:
+        return HttpResponseRedirect(reverse('index'))
     return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products, "number":number})
 
 def edittext(request, number, index):
@@ -201,29 +206,32 @@ def edittext(request, number, index):
             self.cod = index
         def test(self, newtext):
             if self.text == newtext:
+                print("foi")
                 self.active = True
                 return True
             return False
-    print()
     product = request.COOKIES['products'].split("|")[index].split(",-")
-    print(product)
     predefnotes = sendstr(f"GETNOTESID,={product[1]}").split(".=")
-    product[-1] = product[-1].split("\\")
+    product[6] = product[6].split(".-")
+    print(product)
     texts = []
     predeftexts = []
-    for m, n in enumerate(predefnotes):
-        predeftexts.append(text(n, index = m))
-    for j in product[-1]:
-        active = False
+    if predefnotes != [""]:
+        for m, n in enumerate(predefnotes):
+            predeftexts.append(text(n, index = m))
+    for j in product[6]:
         num = True
         for n in predeftexts:
-            if not n.test(j) and j != "" and num:
-                texts.append(text(j))
-                num = False 
-    print(predefnotes)
-    print(predeftexts)
-    print(texts)
-    return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts})
 
+            if n.test(j) or j == "":
+                num = False
+        if num:
+            texts.append(text(j))
+    
+    return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number, "indexofproduct": index})
+
+
+
+            
 def sendorder(request, number):
     pass
