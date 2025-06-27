@@ -14,5 +14,6 @@ urlpatterns = [
     path("commands/<int:number>/neworder/revision", views.orderrevision, name="orderrevision"),
     path("commands/<int:number>/neworder/<int:cod>/<str:product>/<str:printer>", views.categorysizes, name="categorysizes"),
     path("commands/<int:number>/neworder/revision/<int:index>", views.edittext, name="edittext"),
+    path("commands/<int:number>/neworder/send", views.sendorder, name="sendorder")
     
 ]

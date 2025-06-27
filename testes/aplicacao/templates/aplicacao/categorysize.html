@@ -9,7 +9,7 @@
                 const [name, value] = cookie.split("=")
                 if (name === "products"){
                     let products = value.split("|")
-                    for (let i = 0; i < products.length - 1; i++){
+                    for (let i = 0; i < products.length; i++){
                         console.log(products)
                         products[i] = products[i].split(",-")
                     }
@@ -25,7 +25,7 @@
             if (products === null){
                 document.cookie = "products=" + name + ",-" + category + ",-" + "SIZE" + ",-" + price + ",-" + printer + ",-1" + ",-"  + "|" + number + "; path=/commands";
             } else {
-                if (products[products.length - 1] != number){
+                if (!products[products.length - 1].includes(number)){
                     document.cookie = "products=" + name + ",-" + category + ",-" + "SIZE" + ",-" + price + ",-" + printer + ",-1" + ",-"  + "|" + number + "; path=/commands";
                     return
                 }
@@ -34,7 +34,12 @@
                     console.log(products[i])
                     newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6] + "|"
                 }
-                newProducts = newProducts + name + " (" + size + ")" + ",-" + category + ",-" + "SIZE" + ",-" + price + ",-" + printer + ",-1" + ",-"  + "|" + number + "; path=/commands";
+                newProducts = newProducts + name + " (" + size + ")" + ",-" + category + ",-" + "SIZE" + ",-" + price + ",-" + printer + ",-1" + ",-"  + "|" + products[products.length - 1][0]
+                for (let i = 1; i < products[products.length - 1].length; i++){
+                    newProducts = newProducts + ",-" + products[products.length - 1][i]
+                }
+                     
+                newProducts = newProducts + "; path=/commands";
                 document.cookie = "products=" + newProducts
             }
         }

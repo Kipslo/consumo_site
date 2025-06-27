@@ -7,7 +7,7 @@
                 const [name, value] = cookie.split("=")
                 if (name === "products"){
                     let products = value.split("|")
-                    for (let i = 0; i < products.length - 1; i++){
+                    for (let i = 0; i < products.length; i++){
                         products[i] = products[i].split(",-")
                     }
                     return products
@@ -22,7 +22,11 @@
             for (let i = 1; i < products.length - 1; i++){
                 newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|"
             }
-            newProducts = newProducts + products[products.length - 1] + "; path=/commands"
+            newProducts = newProducts + products[products.length - 1][0]
+            for (let i = 1; i < products[products.length - 1].length; i++){
+                newProducts = newProducts + ",-" + products[products.length - 1][i]
+            }
+            newProducts = newProducts + "; path=/commands"
             document.cookie = "products=" + newProducts
         };
         function addorremove1(qtd, index, htmlcod){

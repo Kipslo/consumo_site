@@ -224,3 +224,6 @@ def edittext(request, number, index):
     print(predeftexts)
     print(texts)
     return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts})
+
+def sendorder(request, number):
+    pass
