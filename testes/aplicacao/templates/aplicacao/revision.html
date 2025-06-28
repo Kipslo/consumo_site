@@ -72,7 +72,7 @@
                     <p class="quantity" style="display:block; width:20%; text-align:center; height:100px; padding-top:15px">{{product.qtd}}</p>
                 </div>
                 <div style="display:flex; flex-direction: row; height:100px; width:100%">
-                    <button onclick="addorremove1(1, '{{productl.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; padding-top:15px; border: 3px solid black">Adicionar 1</button>
+                    <button onclick="addorremove1(1, '{{product.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; padding-top:15px; border: 3px solid black">Adicionar 1</button>
                     <button onclick="addorremove1(-1, '{{product.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; padding-top:15px; border: 3px solid black">diminuir 1</button>
                     <a href="{% url 'edittext' number product.cod %}" style="display:block; width:80%; text-align:center; height:100px; padding-top:30px; border: 3px solid black; cursor:pointer">Editar</a>
                     <button onclick="deleteproduct('{{product.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; padding-top:15px; border: 3px solid black">Excluir</button>

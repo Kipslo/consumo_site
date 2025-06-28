@@ -223,8 +223,10 @@ def edittext(request, number, index):
         num = True
         for n in predeftexts:
 
-            if n.test(j) or j == "":
+            if n.test(j):
                 num = False
+        if j == "":
+            num = False
         if num:
             texts.append(text(j))
     
