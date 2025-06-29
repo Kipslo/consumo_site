@@ -236,8 +236,22 @@ def edittext(request, number, index):
 
             
 def sendorder(request, number):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
     products = request.COOKIES['products'].split("|")[index]
     for i, j in enumerate(products):
         products[i] = products[i].split(',-')
-        products[i][6] = products[i][6].split(",-")
+        products[i][6] = products[i][6].split(".-")
+    
+        
+    username = request.user.username
+    print(username)
+    commands = f'{products[-1][0]}'
+    for i in products[-1][1:]:
+        commands = commands + f".={i}"
+    for i in products[:-1]:
+        product, _, size, unitvalue, prynter, text = i[]
+        strforsend = f"INSERTHOST,={commands},={username},={product}.-{a}.-{a}.-{a}"
+        sendstr(strforsend)
+        
     print(products)
