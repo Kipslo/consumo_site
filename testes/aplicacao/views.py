@@ -236,4 +236,8 @@ def edittext(request, number, index):
 
             
 def sendorder(request, number):
-    pass
+    products = request.COOKIES['products'].split("|")[index]
+    for i, j in enumerate(products):
+        products[i] = products[i].split(',-')
+        products[i][6] = products[i][6].split(",-")
+    print(products)
