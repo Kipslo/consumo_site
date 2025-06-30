@@ -250,8 +250,15 @@ def sendorder(request, number):
     for i in products[-1][1:]:
         commands = commands + f".={i}"
     for i in products[:-1]:
-        product, _, size, unitvalue, prynter, text = i[]
-        strforsend = f"INSERTHOST,={commands},={username},={product}.-{a}.-{a}.-{a}"
+        product, categoryid, size, unitvalue, prynter, qtd, pretext = i
+        unitvalue = unitvalue.replace('R$ ', "")
+        if pretext != [''] and pretext != ['undefined']:
+            texts = f'{pretext[0]}'
+            for j in range(len(pretext) - 1):
+                texts = texts + f".={pretext[j+1]}"
+            strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{texts}.-{size}.-{prynter}"
+        else:
+            strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{size}.-{prynter}"
         sendstr(strforsend)
         
     print(products)
