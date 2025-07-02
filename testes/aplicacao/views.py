@@ -232,7 +232,18 @@ def edittext(request, number, index):
     
     return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number, "indexofproduct": index})
 
-
+def addclient(request, number):
+    class entry():
+        def __init__(self, id, name):
+            self.id = id
+            self.name = name
+    entries = sendstr("ENTRIES").split(".=")
+    listen = []
+    for i in entries:
+        cod, name = i.split(",=") 
+        listen.append(entry(cod, name))
+        
+    return render(request, "aplicacao/addclient.html", {"navname": f"Comanda ({number})", "predeftexts": listen, "number":number})
 
             
 def sendorder(request, number):
@@ -249,16 +260,17 @@ def sendorder(request, number):
     commands = f'{products[-1][0]}'
     for i in products[-1][1:]:
         commands = commands + f".={i}"
-    for i in products[:-1]:
-        product, categoryid, size, unitvalue, prynter, qtd, pretext = i
-        unitvalue = unitvalue.replace('R$ ', "")
-        if pretext != [''] and pretext != ['undefined']:
-            texts = f'{pretext[0]}'
-            for j in range(len(pretext) - 1):
-                texts = texts + f".={pretext[j+1]}"
-            strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{texts}.-{size}.-{prynter}"
-        else:
-            strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{size}.-{prynter}"
-        sendstr(strforsend)
+    if number == int(commands[0]):
+        for i in products[:-1]:
+            product, categoryid, size, unitvalue, prynter, qtd, pretext = i
+            unitvalue = unitvalue.replace('R$ ', "")
+            if pretext != [''] and pretext != ['undefined']:
+                texts = f'{pretext[0]}'
+                for j in range(len(pretext) - 1):
+                    texts = texts + f".={pretext[j+1]}"
+                strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{texts}.-{size}.-{prynter}"
+            else:
+                strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{size}.-{prynter}"
+            sendstr(strforsend)
         
     print(products)

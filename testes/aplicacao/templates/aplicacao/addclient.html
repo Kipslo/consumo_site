@@ -1,0 +1,14 @@
+{% extends "aplicacao/navbar.html" %}
+{% block content %}
+
+<div style="width:90%; margin:auto" > 
+<form style="display:flex; flex-direction: column; height:80px">
+    <input style="width:90%; margin-top:10px"></input>
+    <input type="text" style="width:90%; margin-top:10px"></input>
+</form>
+
+</div>
+<nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
+    <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'addclient' number %}">Enviar</a>
+</nav>
+{% endblock %}
