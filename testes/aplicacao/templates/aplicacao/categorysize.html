@@ -7,6 +7,9 @@
             let cookies = document.cookie.split("; ")
             for (let cookie of cookies){
                 const [name, value] = cookie.split("=")
+                if (name === "null"){
+                    return null
+                }
                 if (name === "products"){
                     let products = value.split("|")
                     for (let i = 0; i < products.length; i++){

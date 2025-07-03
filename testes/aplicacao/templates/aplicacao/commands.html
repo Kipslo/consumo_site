@@ -1,6 +1,12 @@
 {% extends "aplicacao/navbar.html" %}
 
 {% block content %}
+<script>
+        function deletecookies(){
+        document.cookie = "products=null; path=/commands"
+        }
+        deletecookies()
+</script>
 {% for command in commands %}
     {% if command.occupied %}
             <a href="{% url 'command' command.number %}" class="btn btn-danger btn-lg"  style="color:#ffffff; margin-top:3px">{{command.text}}</a>

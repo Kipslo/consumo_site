@@ -44,7 +44,7 @@ def commandpage(request,number):
         productson = True 
     else:
         productson = False
-    return render(request, "aplicacao/command.html", {"navname": f"comanda {number}({clientname})", "clientname": clientname, "id": idclient, "products": products, "productson": productson, "number":number, "backname": "commands"})
+    return render(request, "aplicacao/command.html", {"navname": f"Comanda {number}({clientname})", "clientname": clientname, "id": idclient, "products": products, "productson": productson, "number":number, "backname": "commands"})
 def commands(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect("login")
@@ -84,7 +84,7 @@ def neworder(request, number):
     for i in pdt:
         n = i.split(".=")
         categories.append(category(n[0], n[1]))
-    return render(request, 'aplicacao/neworder.html', {"categories": categories, "empty": empty, "number": number, "navname":f"comanda({number})"})
+    return render(request, 'aplicacao/neworder.html', {"categories": categories, "empty": empty, "number": number, "navname":f"Comanda({number})"})
 def category(request, number, cod):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
@@ -106,7 +106,7 @@ def category(request, number, cod):
     for i in productscategory:
         product = i.split("|")
         productslist.append(products(product[0], cod, product[1], product[2], product[3]))
-    return render(request, 'aplicacao/category.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})", "cod": cod})
+    return render(request, 'aplicacao/category.html', {"products": productslist, "empty": empty, "number": number, "navname":f"Comanda({number})", "cod": cod})
 def categorysizes(request, number, cod, product, printer):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
@@ -127,7 +127,7 @@ def categorysizes(request, number, cod, product, printer):
     for i in sizes:
         productnow = i.split("|")
         productslist.append(products(product, cod, productnow[1], productnow[0]))
-    return render(request, 'aplicacao/categorysize.html', {"products": productslist, "empty": empty, "number": number, "navname":f"comanda({number})", "printer": printer})
+    return render(request, 'aplicacao/categorysize.html', {"products": productslist, "empty": empty, "number": number, "navname":f"Comanda({number})", "printer": printer})
 def login(request):
     if not request.user.is_authenticated:
         messageerror = ""
@@ -186,7 +186,7 @@ def orderrevision(request, number):
     products = []
     try:
         products2 = request.COOKIES['products'].split("|")[0:-1]
-    except:
+    except Exception as error:
         return HttpResponseRedirect(reverse("index"))
     htmlcod = 0
     for j, i in enumerate(products2):
@@ -198,19 +198,19 @@ def orderrevision(request, number):
         return HttpResponseRedirect(reverse('index'))
     return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products, "number":number})
 
-def edittext(request, number, index):
+def edittext(request, number, cod):
     class text():
-        def __init__(self, value, active = False, index = -1):
+        def __init__(self, value, active = False, cod = -1):
             self.text = value
             self.active = active
-            self.cod = index
+            self.cod = cod
         def test(self, newtext):
             if self.text == newtext:
                 print("foi")
                 self.active = True
                 return True
             return False
-    product = request.COOKIES['products'].split("|")[index].split(",-")
+    product = request.COOKIES['products'].split("|")[cod].split(",-")
     predefnotes = sendstr(f"GETNOTESID,={product[1]}").split(".=")
     product[6] = product[6].split(".-")
     print(product)
@@ -218,7 +218,7 @@ def edittext(request, number, index):
     predeftexts = []
     if predefnotes != [""]:
         for m, n in enumerate(predefnotes):
-            predeftexts.append(text(n, index = m))
+            predeftexts.append(text(n, cod = m))
     for j in product[6]:
         num = True
         for n in predeftexts:
@@ -230,7 +230,7 @@ def edittext(request, number, index):
         if num:
             texts.append(text(j))
     
-    return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number, "indexofproduct": index})
+    return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number, "indexofproduct": cod})
 
 def addclient(request, number):
     class entry():
@@ -249,28 +249,35 @@ def addclient(request, number):
 def sendorder(request, number):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
-    products = request.COOKIES['products'].split("|")[index]
-    for i, j in enumerate(products):
-        products[i] = products[i].split(',-')
+    products = request.COOKIES['products'].split("|")
+    for i, j in enumerate(products[:-1]):
+        products[i] = j.split(',-') 
         products[i][6] = products[i][6].split(".-")
-    
-        
+    products[-1] = products[-1].split('.-')
     username = request.user.username
-    print(username)
     commands = f'{products[-1][0]}'
     for i in products[-1][1:]:
         commands = commands + f".={i}"
-    if number == int(commands[0]):
+    if number == int(products[-1][0]):
+        print(products[:-1])
+        end = 0
         for i in products[:-1]:
             product, categoryid, size, unitvalue, prynter, qtd, pretext = i
+            print(i)
             unitvalue = unitvalue.replace('R$ ', "")
-            if pretext != [''] and pretext != ['undefined']:
+            if pretext != [''] and pretext != ['undefined'] and pretext != '':
                 texts = f'{pretext[0]}'
                 for j in range(len(pretext) - 1):
                     texts = texts + f".={pretext[j+1]}"
                 strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{texts}.-{size}.-{prynter}"
             else:
                 strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{size}.-{prynter}"
-            sendstr(strforsend)
+            print(strforsend)
+            result = sendstr(strforsend)
+            print(result)
+            if result != "Y":
+                end = result
+        print(end)
+        if end == 0:
+            return HttpResponseRedirect(reverse('index'))
         
-    print(products)
