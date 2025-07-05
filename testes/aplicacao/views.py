@@ -12,8 +12,7 @@ import socket
 
 
 PORT = 55261
-def checklogin(name):
-    51
+def checklogin(request):
     
     return permission
 def sendstr(data):       
@@ -248,10 +247,7 @@ def addclient(request, number):
     for i in entries:
         cod, name = i.split(",=") 
         listen.append(entry(cod, name))
-        
     return render(request, "aplicacao/addclient.html", {"navname": f"Comanda ({number})", "predeftexts": listen, "number":number})
-
-            
 def sendorder(request, number):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
