@@ -29,9 +29,21 @@
             }
             return null
     }
-    function setcookie(list){
+    function setcookie(){
         let strlisten = ""
-
+        let names = document.querySelectorAll(".name")
+        let qtds = document.querySelectorAll(".qtd")
+        let inlist = 0
+        for (let i = 0; i < names.length; i++){
+            if (qtds[i].textContent > 0){
+                if (inlist == 0){
+                    strlisten = names[i].textContent + ".-" + qtds[i].textContent
+                    inlist = inlist + 1
+                } else {
+                    strlisten = strlisten + ",-" + names[i].textContent + ".-" + qtds[i].textContent
+                }
+            }   
+        }
         document.cookie = "entries=" + strlisten
     }
     function setclient(){
@@ -46,20 +58,16 @@
     }
     function add1(cod, htmlindex, name){
         let qtt = document.querySelectorAll(".qtd")[htmlindex];
-        let cookie = getcookie()
         qtt.textContent = parseInt(qtt.textContent, 10) + 1;
         setcookie()
     }
     function remove1(cod, htmlindex, name){
         let qtt = document.querySelectorAll(".qtd")[htmlindex];
-        let cookie = getcookie()
         if (qtt.textContent > 0){
             qtt.textContent = parseInt(qtt.textContent, 10) - 1;
         }
         setcookie()
     }
-    setclient()
-    setcookie()
 </script>
 <div style="width:100%; justify-content: center; align-items: center"> 
 <form style="flex-direction: column;" class="content">
@@ -68,7 +76,7 @@
 </form>
 {% for predeftext in predeftexts %}
 <div class="content" style="justify-content:center; align-items:center">
-    <h1 style="display:inline-block; width:200px; font-size:27px" clas="name">{{predeftext.name}}</h1>
+    <h1 style="display:inline-block; width:200px; font-size:27px" class="name">{{predeftext.name}}</h1>
     <button style="display:inline-block; border:none; background-color:transparent" onclick="remove1({{predeftext.cod}}, {{predeftext.htmlcod}}, '{{predeftext.name}}')"><img src="{% static 'imgs/minus.png' %}" width="40" height="40"></button>
     <h1 style="display:inline-block; font-size:27px" class="qtd">0</h1>
     <button style="display:inline-block; border:none; background-color:transparent" onclick="add1({{predeftext.cod}}, {{predeftext.htmlcod}}, '{{predeftext.name}}')"><img src="{% static 'imgs/add.png' %}" width="40" height="40"></button>
@@ -79,4 +87,8 @@
     <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'index' %}">Cancelar</a>
     <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'addclient' number %}">Enviar</a>
 </nav>
+<script>
+    setclient()
+    setcookie()
+</script>
 {% endblock %}
