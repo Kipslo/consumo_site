@@ -15,27 +15,63 @@
 {% endblock head %}
 {% block content %}
 <script>
-    function add1(index){
-        let qtt = document.querySelectorAll(".qtd")[index]
-        console.log(qtt.textContent)
-        qtt.textcontent = parseInt(qtt.textcontent) + 1
-
+    function getcookie(){
+        let cookies = document.cookie.split("; ");
+            for (let cookie of cookies){
+                const [name, value] = cookie.split("=");
+                if (name === "entries"){
+                    let entries = cookie.split(',-')
+                    for (let i = 0; i < entries.length - 1; i++){
+                        entries[i] = entries[i].split('.-')
+                    }
+                    return entries
+                }
+            }
+            return null
     }
-    function remove1(index){
+    function setcookie(list){
+        let strlisten = ""
 
+        document.cookie = "entries=" + strlisten
     }
+    function setclient(){
+        let id = document.getElementById("idclient");
+        let name = document.getElementById("nameclient");
+        let number = Number(id.value);
+        console.log(number);
+        if (isNaN(number)){
+            id.value = "";
+        }
+        document.cookie = "client=" + number + ",-" + nameclient
+    }
+    function add1(cod, htmlindex, name){
+        let qtt = document.querySelectorAll(".qtd")[htmlindex];
+        let cookie = getcookie()
+        qtt.textContent = parseInt(qtt.textContent, 10) + 1;
+        setcookie()
+    }
+    function remove1(cod, htmlindex, name){
+        let qtt = document.querySelectorAll(".qtd")[htmlindex];
+        let cookie = getcookie()
+        if (qtt.textContent > 0){
+            qtt.textContent = parseInt(qtt.textContent, 10) - 1;
+        }
+        setcookie()
+    }
+    setclient()
+    setcookie()
 </script>
 <div style="width:100%; justify-content: center; align-items: center"> 
 <form style="flex-direction: column;" class="content">
-    <input style="margin-top:10px" placeholder="id do cliente"></input>
-    <input type="text" style="margin-top:10px" placeholder="nome do cliente"></input>
+    <input id="idclient" style="margin-top:10px" placeholder="id do cliente" onchange="setclient()"></input>
+    <input id="nameclient" type="text" style="margin-top:10px" placeholder="nome do cliente" onchange="setclient()"></input>
 </form>
 {% for predeftext in predeftexts %}
 <div class="content" style="justify-content:center; align-items:center">
-    <h1 style="display:inline-block; width:200px; font-size:27px" clas="name">{{predeftext.cod}}-{{predeftext.name}}</h1>
-    <button style="display:inline-block; border:none; background-color:transparent" onclick="remove1({{predeftext.htmlcod}})"><img src="{% static 'imgs/minus.png' %}" width="40" height="40"></button>
+    <h1 style="display:inline-block; width:200px; font-size:27px" clas="name">{{predeftext.name}}</h1>
+    <button style="display:inline-block; border:none; background-color:transparent" onclick="remove1({{predeftext.cod}}, {{predeftext.htmlcod}}, '{{predeftext.name}}')"><img src="{% static 'imgs/minus.png' %}" width="40" height="40"></button>
     <h1 style="display:inline-block; font-size:27px" class="qtd">0</h1>
-    <button style="display:inline-block; border:none; background-color:transparent" onclick="add1({{predeftext.htmlcod}})"><img src="{% static 'imgs/add.png' %}" width="40" height="40"></button>
+    <button style="display:inline-block; border:none; background-color:transparent" onclick="add1({{predeftext.cod}}, {{predeftext.htmlcod}}, '{{predeftext.name}}')"><img src="{% static 'imgs/add.png' %}" width="40" height="40"></button>
 </div>
 {% endfor %}
 </div>
