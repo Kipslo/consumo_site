@@ -1,0 +1,46 @@
+{% extends "aplicacao/navbar.html" %}
+{% load static %}
+{% block head %}
+<style>
+    .content{
+        display:flex;
+        height:80px; 
+        width: 90%; 
+        margin:auto;
+    }
+    .body{
+        overflow-y:scrool;
+    }
+</style>
+{% endblock head %}
+{% block content %}
+<script>
+    function add1(index){
+        let qtt = document.querySelectorAll(".qtd")[index]
+        console.log(qtt.textContent)
+        qtt.textcontent = parseInt(qtt.textcontent) + 1
+
+    }
+    function remove1(index){
+
+    }
+</script>
+<div style="width:100%; justify-content: center; align-items: center"> 
+<form style="flex-direction: column;" class="content">
+    <input style="margin-top:10px" placeholder="id do cliente"></input>
+    <input type="text" style="margin-top:10px" placeholder="nome do cliente"></input>
+</form>
+{% for predeftext in predeftexts %}
+<div class="content" style="justify-content:center; align-items:center">
+    <h1 style="display:inline-block; width:200px; font-size:27px" clas="name">{{predeftext.cod}}-{{predeftext.name}}</h1>
+    <button style="display:inline-block; border:none; background-color:transparent" onclick="remove1({{predeftext.htmlcod}})"><img src="{% static 'imgs/minus.png' %}" width="40" height="40"></button>
+    <h1 style="display:inline-block; font-size:27px" class="qtd">0</h1>
+    <button style="display:inline-block; border:none; background-color:transparent" onclick="add1({{predeftext.htmlcod}})"><img src="{% static 'imgs/add.png' %}" width="40" height="40"></button>
+</div>
+{% endfor %}
+</div>
+<nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
+    <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'index' %}">Cancelar</a>
+    <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'addclient' number %}">Enviar</a>
+</nav>
+{% endblock %}

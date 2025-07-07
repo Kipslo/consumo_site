@@ -1,0 +1,86 @@
+{% extends "aplicacao/navbar.html" %}
+{% block content %}
+    <script>
+        function getcookie(){
+            let cookies = document.cookie.split("; ");
+            for (let cookie of cookies){
+                const [name, value] = cookie.split("=");
+                if (name === "products"){
+                    let products = value.split("|")
+                    for (let i = 0; i < products.length; i++){
+                        products[i] = products[i].split(",-")
+                    }
+                    return products
+                }
+            }
+            return null
+
+        };
+        function listtostring(products){
+            let newProducts;
+            newProducts =products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] + ",-" + products[0][6]+ "|";
+            for (let i = 1; i < products.length - 1; i++){
+                newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|";
+            }
+            newProducts = newProducts + products[products.length - 1][0]
+            for (let i = 1; i < products[products.length - 1].length; i++){
+                newProducts = newProducts + ",-" + products[products.length - 1][i]
+            }
+            newProducts = newProducts + "; path=/commands"
+            document.cookie = "products=" + newProducts
+        };
+        function addorremove1(qtd, index, htmlcod){
+            var quantitylist = document.querySelectorAll(".quantity");
+            let products = getcookie();
+            let newProducts;
+            if (qtd != -1 || parseInt(products[index][5], 10) > 0){
+                products[index][5] = parseInt(products[index][5], 10) + qtd;
+            }
+            quantitylist[htmlcod].textContent = products[index][5];
+            newProducts = listtostring(products);
+            
+        };
+        function deleteproduct(index){
+            let products = getcookie();
+            let newProducts = "";
+            if (index != 0){
+                newProducts = newProducts + products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] + ",-" + products[0][6]+ "|";
+            } else {
+                newProducts = "none|" ;
+            }
+            for (let i = 1; i < products.length - 1; i++){
+                if (i != index){
+                    newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" + products[i][6]+ "|";
+                } else {
+                    newProducts = newProducts + "none|";
+                }
+                }
+            newProducts = newProducts + products[products.length - 1] + "; path=/commands";
+            document.cookie = "products=" + newProducts;
+            location.reload();
+        }
+    </script>
+    <div>
+        <div style="display:flex; flex-direction: row; width: 90%; height:50px; background-color:#ccc; margin:auto; margin-bottom:5px">          
+            <p style="display:block; width:80%; text-align:center">product</p>
+            <p style="display:block; width:20%; text-align:center">qtd</p>
+        </div>
+        {% for product in products %}
+            <div style="width: 90%;height:200px; background-color:#ccc; margin:auto; margin-bottom:5px">
+                <div style="display:flex; flex-direction: row; height:100px; width:100%">
+                    <p style="display:block; width:80%; text-align:center; height:100px; padding-top:15px">{{product.name}}</p>
+                    <p class="quantity" style="display:block; width:20%; text-align:center; height:100px; padding-top:15px">{{product.qtd}}</p>
+                </div>
+                <div style="display:flex; flex-direction: row; height:100px; width:100%">
+                    <button onclick="addorremove1(1, '{{product.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; border: 3px solid black">Adicionar 1</button>
+                    <button onclick="addorremove1(-1, '{{product.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; border: 3px solid black">diminuir 1</button>
+                    <a href="{% url 'edittext' number product.cod %}" style="display:block; width:80%; text-align:center; height:100px; border: 3px solid black; cursor:pointer; text-decoration:none; color:black; padding-top:34px">Editar</a>
+                    <button onclick="deleteproduct('{{product.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; border: 3px solid black">Excluir</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
+        <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'neworder' number %}">Voltar</a>
+        <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'sendorder' number %}">enviar</a>
+{% endblock %}
