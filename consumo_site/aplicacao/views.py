@@ -15,6 +15,7 @@ PORT = 55261
 def checklogin(request):
     temp = {"Y": True, "N": False}
     responseserver = sendstr(f"CHECKLOGIN,={request.user.username}")
+    print(responseserver)
     return temp[responseserver]
 def sendstr(data):       
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -26,8 +27,6 @@ def sendstr(data):
     return data.decode()
 
 def index(request):
-    lastuser = Userdata.objects.get(username=request.user.username)
-    print(lastuser.last_login)
     if not request.user.is_authenticated:
         return HttpResponseRedirect("login")
     return HttpResponseRedirect("commands")
@@ -59,7 +58,7 @@ def commands(request):
         return HttpResponseRedirect("login")
     if not checklogin(request):
         logoutAuth(request)
-        return HttpResponseRedirect("login")
+        return HttpResponseRedirect(reverse("login"))
     class occupiedclass():
         def __init__(self, number, text, occupied = False):
             self.number = number
