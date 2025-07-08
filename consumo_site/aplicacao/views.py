@@ -13,8 +13,9 @@ import socket
 
 PORT = 55261
 def checklogin(request):
-    
-    return permission
+    temp = {"Y": True, "N": False}
+    responseserver = sendstr(f"CHECKLOGIN,={request.user.username}")
+    return temp[responseserver]
 def sendstr(data):       
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((socket.gethostbyname(socket.gethostname()), PORT))
@@ -32,6 +33,9 @@ def index(request):
     return HttpResponseRedirect("commands")
 def commandpage(request,number):
     if not request.user.is_authenticated:
+        return HttpResponseRedirect("login")
+    if not checklogin(request):
+        logoutAuth(request)
         return HttpResponseRedirect("login")
     class product():
         def __init__(self, listen):
@@ -52,6 +56,9 @@ def commandpage(request,number):
     return render(request, "aplicacao/command.html", {"navname": f"Comanda {number}({clientname})", "clientname": clientname, "id": idclient, "products": products, "productson": productson, "number":number, "backname": "commands"})
 def commands(request):
     if not request.user.is_authenticated:
+        return HttpResponseRedirect("login")
+    if not checklogin(request):
+        logoutAuth(request)
         return HttpResponseRedirect("login")
     class occupiedclass():
         def __init__(self, number, text, occupied = False):
@@ -75,6 +82,9 @@ def commands(request):
 def neworder(request, number):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
+    if not checklogin(request):
+        logoutAuth(request)
+        return HttpResponseRedirect("login")
     class category():
         def __init__(self, cod, name):
             self.cod = cod
@@ -93,6 +103,9 @@ def neworder(request, number):
 def category(request, number, cod):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
+    if not checklogin(request):
+        logoutAuth(request)
+        return HttpResponseRedirect("login")
     class products():
         def __init__(self, name, cod, tipe, price, printer):
             self.name = name   
@@ -115,6 +128,9 @@ def category(request, number, cod):
 def categorysizes(request, number, cod, product, printer):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
+    if not checklogin(request):
+        logoutAuth(request)
+        return HttpResponseRedirect("login")
     class products():
         def __init__(self, name, cod, price, size):
             self.name = name   
@@ -178,6 +194,9 @@ def logout(request):
 def orderrevision(request, number):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
+    if not checklogin(request):
+        logoutAuth(request)
+        return HttpResponseRedirect("login")
     class product():
         def __init__(self, index, name, category, tipe, price, printer, qtd, htmlcod):
             self.cod = index
@@ -204,6 +223,11 @@ def orderrevision(request, number):
     return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products, "number":number})
 
 def edittext(request, number, cod):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
+    if not checklogin(request):
+        logoutAuth(request)
+        return HttpResponseRedirect("login")
     class text():
         def __init__(self, value, active = False, cod = -1):
             self.text = value
@@ -238,6 +262,11 @@ def edittext(request, number, cod):
     return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number, "indexofproduct": cod})
 
 def addclient(request, number):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
+    if not checklogin(request):
+        logoutAuth(request)
+        return HttpResponseRedirect("login")
     class entry():
         def __init__(self, cod, name, htmlcod):
             self.cod = cod
@@ -254,6 +283,9 @@ def addclient(request, number):
 def sendorder(request, number):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
+    if not checklogin(request):
+        logoutAuth(request)
+        return HttpResponseRedirect("login")
     products = request.COOKIES['products'].split("|")
     for i, j in enumerate(products[:-1]):
         products[i] = j.split(',-') 
@@ -284,6 +316,9 @@ def sendorder(request, number):
 def sendclient(request, number):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
+    if not checklogin(request):
+        logoutAuth(request)
+        return HttpResponseRedirect("login")
     cod, clientname = request.COOKIES['client'].split(",-")
     entriescookie = request.COOKIES['entries'].split(",-")
     entries = []
