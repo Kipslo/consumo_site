@@ -264,11 +264,9 @@ def sendorder(request, number):
     for i in products[-1][1:]:
         commands = commands + f".={i}"
     if number == int(products[-1][0]):
-        print(products[:-1])
         end = 0
         for i in products[:-1]:
             product, categoryid, size, unitvalue, prynter, qtd, pretext = i
-            print(i)
             unitvalue = unitvalue.replace('R$ ', "")
             if pretext != [''] and pretext != ['undefined'] and pretext != '':
                 texts = f'{pretext[0]}'
@@ -277,12 +275,28 @@ def sendorder(request, number):
                 strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{texts}.-{size}.-{prynter}"
             else:
                 strforsend = f"INSERTHOST,={commands},={username},={product}.-{categoryid}.-{unitvalue}.-{qtd}.-{size}.-{prynter}"
-            print(strforsend)
             result = sendstr(strforsend)
-            print(result)
             if result != "Y":
                 end = result
-        print(end)
         if end == 0:
             return HttpResponseRedirect(reverse('index'))
         
+def sendclient(request, number):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
+    cod, clientname = request.COOKIES['client'].split(",-")
+    entriescookie = request.COOKIES['entries'].split(",-")
+    entries = []
+    sendtext = f"INSERTCLIENTID,={request.user.username},=passwordfake,={number},={cod},={clientname}"
+    num = True
+    for i in entriescookie:
+        name, qtd = i.split(".-")
+        if num:
+            sendtext = sendtext + f",={name}.={qtd}"
+            num = False
+        else:
+            sendtext = sendtext + f";={name}.={qtd}"
+        entries.append(i.split(".-"))
+    print(sendtext)
+    print(sendstr(sendtext))
+    return HttpResponseRedirect(reverse('index'))

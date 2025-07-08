@@ -16,6 +16,6 @@ urlpatterns = [
     path("commands/<int:number>/neworder/revision/<int:index>", views.edittext, name="edittext"),
     path("commands/<int:number>/addclient", views.addclient, name="addclient"),
     path("commands/<int:number>/neworder/send", views.sendorder, name="sendorder"),
-
+    path("commands/<int:number>/addclient/send", views.sendclient, name="sendclient"),
     
 ]

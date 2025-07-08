@@ -54,7 +54,7 @@
         if (isNaN(number)){
             id.value = "";
         }
-        document.cookie = "client=" + number + ",-" + nameclient
+        document.cookie = "client=" + number + ",-" + nameclient.value
     }
     function add1(cod, htmlindex, name){
         let qtt = document.querySelectorAll(".qtd")[htmlindex];
@@ -85,7 +85,7 @@
 </div>
 <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
     <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'index' %}">Cancelar</a>
-    <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'addclient' number %}">Enviar</a>
+    <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'sendclient' number %}">Enviar</a>
 </nav>
 <script>
     setclient()
