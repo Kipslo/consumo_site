@@ -14,6 +14,7 @@ urlpatterns = [
     path("commands/<int:number>/neworder/revision", views.orderrevision, name="orderrevision"),
     path("commands/<int:number>/neworder/<int:cod>/<str:product>/<str:printer>", views.categorysizes, name="categorysizes"),
     path("commands/<int:number>/neworder/revision/<int:index>", views.edittext, name="edittext"),
+    path("commands/<ing:number>/neworder/division", views.divisionpage, name="divisionpage"),
     path("commands/<int:number>/addclient", views.addclient, name="addclient"),
     path("commands/<int:number>/neworder/send", views.sendorder, name="sendorder"),
     path("commands/<int:number>/addclient/send", views.sendclient, name="sendclient"),
