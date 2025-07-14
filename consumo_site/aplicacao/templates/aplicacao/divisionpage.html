@@ -46,19 +46,31 @@
             }
             newProducts = newProducts + products[-1][0]
             for (let i = 1; i < products[-1].length; i++){
-                newProducts = newProducts + ",-" +
+                newProducts = newProducts + ",-" + products[-1][i]
             }
-            newProducts = newProducts + products[products.length - 1] + "; path=/commands";
+            newProducts = newProducts + "; path=/commands";
             document.cookie = "products=" + newProducts;
         };
         function changetext(){
-            let input = document.getElementById("commands")
-            let listen = 
-            let products = 
+            let input = document.getElementById("commands");
+            let listen = input.value.split(",");
+            let products = getproducts();
+            let number = products[-1][0]
+            products[-1] = [number, ]
+            for (i = 0, i < listen.lenght; i++){
+                if (!isNaN(Number(listen[i]))){
+                    products[-1].push(listen[i])
+                }
+            }
+            listtostring(listen)
         }
     </script>
     <form>
         <input id="commands" type="text" onchange="changetext()" placeholder="comandas para dividir(separadas por virgula)">
         </input>
     </form>
+    <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
+    <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'orderrevision' number %}">Voltar</a>
+        
+    </nav>
 {% endblock %}
