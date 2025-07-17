@@ -13,7 +13,7 @@
                         products[i] = products[i].split(",-");
                         products[i][6] = products[i][6].split(".-");
                     }
-                    products[products.length - 1] = toString(products.length - 1).split(",-")
+                    products[products.length - 1] = products[products.length - 1].split(",-")
                     console.log(products)
                     return products
                 }
@@ -23,7 +23,7 @@
         function listtostring(products){
             let newProducts;
             newProducts =products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] ;
-            
+            console.log(products)
             if (products[0][6].length === 0){
                 newProducts = newProducts + ",-|"
             } else {
@@ -59,12 +59,14 @@
             let products = getproducts();
             let number = products[products.length - 1][0]
             products[products.length - 1] = [number, ]
-            for (i = 0; i < listen.lenght; i++){
+            for (let i = 0; i < listen.length; i++){
+                console.log("oi")
+                console.log(isNaN(Number(listen[i])))
                 if (!isNaN(Number(listen[i]))){
-                    products[-1].push(listen[i])
+                    products[products.length - 1].push(listen[i])
                 }
             }
-            listtostring(listen)
+            listtostring(products)
         }
     </script>
     <div style="margin: auto; align-items: center; width: 300px;">

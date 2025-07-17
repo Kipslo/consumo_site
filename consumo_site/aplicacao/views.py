@@ -160,7 +160,7 @@ def divisionpage(request, number):
     temp = False
     for i in products[-1]:
         if temp:
-            value = ", " + str(i)
+            value = value + ", " + str(i)
         else:
             value = i
             temp = True
@@ -303,10 +303,11 @@ def sendorder(request, number):
         logoutAuth(request)
         return HttpResponseRedirect(reverse("login"))
     products = request.COOKIES['products'].split("|")
+    print(products)
     for i, j in enumerate(products[:-1]):
         products[i] = j.split(',-') 
         products[i][6] = products[i][6].split(".-")
-    products[-1] = products[-1].split('.-')
+    products[-1] = products[-1].split(',-')
     username = request.user.username
     commands = f'{products[-1][0]}'
     for i in products[-1][1:]:
