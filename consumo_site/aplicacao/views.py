@@ -154,7 +154,17 @@ def divisionpage(request, number):
     if not checklogin(request):
         logoutAuth(request)
         return HttpResponseRedirect(reverse("login"))
-    return render(request, 'aplicacao/divisionpage.html', {"navname": f"Dividir a comanda ({number})"})
+    products = request.COOKIES['products'].split("|")
+    value = ""
+    products[-1] = products[-1].split(",-")[1:]
+    temp = False
+    for i in products[-1]:
+        if temp:
+            value = ", " + str(i)
+        else:
+            value = i
+            temp = True
+    return render(request, 'aplicacao/divisionpage.html', {"navname": f"Dividir a comanda ({number})", "value":value, "number":number})
 def login(request):
     if not request.user.is_authenticated:
         messageerror = ""
@@ -226,7 +236,7 @@ def orderrevision(request, number):
             htmlcod += 1
     if products == []:
         return HttpResponseRedirect(reverse('index'))
-    return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products, "number":number})
+    return render(request, "aplicacao/revision.html", {"navname": f"Comanda ({number})", "products": products, "number":number, "divisionbutton": True})
 
 def edittext(request, number, cod):
     if not request.user.is_authenticated:

@@ -1,4 +1,7 @@
 {% extends "aplicacao/navbar.html" %}
+{% block division %}
+    <a class="menuitem" href="{% url 'divisionpage' number %}">Dividir</a>
+{% endblock division %}
 {% block content %}
     <script>
         function getcookie(){

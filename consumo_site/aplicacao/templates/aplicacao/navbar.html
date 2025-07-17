@@ -8,7 +8,6 @@
     .menu_div{
       display: none;
       overflow:hidden;
-      height:0px;
     }
     .menu_div.active{
       display: flex !important;
@@ -63,8 +62,8 @@
         </button>
         <div class="menu_div">
           <a class="menuitem" href="{% url 'logout' %}" style="margin-top:3px">Sair</a>
-          
-          <a class="menuitem" ></a>
+          {% block division %}
+          {% endblock division %}
         </div>
         
         

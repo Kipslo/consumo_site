@@ -1,5 +1,6 @@
 {% extends "aplicacao/navbar.html" %}
 
+
 {% block content %}
     <script>
         function getproducts(){
@@ -12,7 +13,7 @@
                         products[i] = products[i].split(",-");
                         products[i][6] = products[i][6].split(".-");
                     }
-                    products[-1] = products[-1].split(",-")
+                    products[products.length - 1] = toString(products.length - 1).split(",-")
                     console.log(products)
                     return products
                 }
@@ -21,8 +22,8 @@
     }
         function listtostring(products){
             let newProducts;
-            console.log(products)
             newProducts =products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] ;
+            
             if (products[0][6].length === 0){
                 newProducts = newProducts + ",-|"
             } else {
@@ -44,10 +45,11 @@
                     newProducts = newProducts + "|";
                 }
             }
-            newProducts = newProducts + products[-1][0]
-            for (let i = 1; i < products[-1].length; i++){
-                newProducts = newProducts + ",-" + products[-1][i]
+            newProducts = newProducts + products[products.length - 1][0]
+            for (let i = 1; i < products[products.length - 1].length; i++){
+                newProducts = newProducts + ",-" + products[products.length - 1][i]
             }
+            console.log(newProducts)
             newProducts = newProducts + "; path=/commands";
             document.cookie = "products=" + newProducts;
         };
@@ -55,9 +57,9 @@
             let input = document.getElementById("commands");
             let listen = input.value.split(",");
             let products = getproducts();
-            let number = products[-1][0]
-            products[-1] = [number, ]
-            for (i = 0, i < listen.lenght; i++){
+            let number = products[products.length - 1][0]
+            products[products.length - 1] = [number, ]
+            for (i = 0; i < listen.lenght; i++){
                 if (!isNaN(Number(listen[i]))){
                     products[-1].push(listen[i])
                 }
@@ -65,10 +67,13 @@
             listtostring(listen)
         }
     </script>
+    <div style="margin: auto; align-items: center; width: 300px;">
     <form>
-        <input id="commands" type="text" onchange="changetext()" placeholder="comandas para dividir(separadas por virgula)">
+        <p>comandas para dividir(separadas por virgula)</p>
+        <input style="width: 300px;" id="commands" type="text" onchange="changetext()" value="{{value}}">
         </input>
     </form>
+    </div>
     <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
     <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'orderrevision' number %}">Voltar</a>
         
