@@ -28,7 +28,7 @@
             if (products === null){
                 document.cookie = "products=" + name + ",-" + category + ",-" + "SIZE" + ",-" + price + ",-" + printer + ",-1" + ",-"  + "|" + number + "; path=/commands";
             } else {
-                if (!products[products.length - 1].includes(number)){
+                if (!products[products.length - 1][0] === number){
                     document.cookie = "products=" + name + ",-" + category + ",-" + "SIZE" + ",-" + price + ",-" + printer + ",-1" + ",-"  + "|" + number + "; path=/commands";
                     return
                 }
@@ -43,6 +43,7 @@
                 }
                      
                 newProducts = newProducts + "; path=/commands";
+                console.log(newProducts)
                 document.cookie = "products=" + newProducts
             }
         }
