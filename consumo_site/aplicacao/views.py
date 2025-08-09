@@ -258,7 +258,6 @@ def edittext(request, number, cod):
     product = request.COOKIES['products'].split("|")[cod].split(",-")
     predefnotes = sendstr(f"GETNOTESID,={product[1]}").split(".=")
     product[6] = product[6].split(".-")
-    print(product)
     texts = []
     predeftexts = []
     if predefnotes != [""]:
@@ -274,7 +273,6 @@ def edittext(request, number, cod):
             num = False
         if num:
             texts.append(text(j))
-    
     return render(request, "aplicacao/edittext.html", {"navname": f"Comanda ({number})", "texts": texts, "predeftexts": predeftexts, "number":number, "indexofproduct": cod})
 
 def addclient(request, number):
