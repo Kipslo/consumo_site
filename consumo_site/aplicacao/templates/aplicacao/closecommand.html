@@ -1,12 +1,6 @@
 {% extends "aplicacao/navbar.html" %}
 
-{% block navbar %}
-    <a href="{% url 'closecommand' number %}" style="margin-top:3px">Fechar comanda</a>
-{% endblock navbar %}
 
-{% block division %}
-    <a class="menuitem" href="{% url 'closecommand' number %}" style="margin-top:3px">Fechar comanda</a>
-{% endblock division %}
 
 {% block content %}
 
@@ -30,4 +24,5 @@
         
         <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'addclient' number %}">Adicionar cliente</a>
     </nav>
-{% endblock %}
+{% endblock content%}
+

@@ -350,3 +350,12 @@ def sendclient(request, number):
     print(sendtext)
     print(sendstr(sendtext))
     return HttpResponseRedirect(reverse('index'))
+def closecommand(request, number):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('index'))
+    if not checklogin(request):
+        logoutAuth(request)
+        return HttpResponseRedirect(reverse("login"))
+    #if not checkpermission(request):
+    #    return HttpResponseRedirect(reverse('index'))
+    return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number})

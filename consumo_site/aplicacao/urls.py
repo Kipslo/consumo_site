@@ -18,5 +18,6 @@ urlpatterns = [
     path("commands/<int:number>/addclient", views.addclient, name="addclient"),
     path("commands/<int:number>/neworder/send", views.sendorder, name="sendorder"),
     path("commands/<int:number>/addclient/send", views.sendclient, name="sendclient"),
+    path("commands/<int:number>/closecommand", views.closecommand, name="closecommand"),
     
 ]
