@@ -358,4 +358,22 @@ def closecommand(request, number):
         return HttpResponseRedirect(reverse("login"))
     #if not checkpermission(request):
     #    return HttpResponseRedirect(reverse('index'))
-    return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number})
+    class pagment():
+        def __init__(self, tipe, quantity):
+            self.tipe = tipe
+            self.quantity = quantity
+    pagmentstemp = request.COOKIES['payment'].split(",=")
+    command = int(request.COOKIES['paymentscommand'])
+    pagments = []
+    if command == number:
+        for i in pagmentstemp:
+            tipe, quantity = i.split(".=")
+            pagments.append(pagment(tipe, quantity))
+    price = 0
+    products = sendstr("PRODUCTSON,=" + str(number)).split(",=")
+    if products != [""]:
+        for i in products:
+            price = price + (float(i[2].replace(",", ".")) * 100)
+    price = str(price / 100).split(".")
+    price = price[0] + "." + price[1][0:2]
+    return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number, "price": price, "pagments": pagments})
