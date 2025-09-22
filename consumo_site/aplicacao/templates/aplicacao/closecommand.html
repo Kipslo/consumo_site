@@ -1,28 +1,67 @@
 {% extends "aplicacao/navbar.html" %}
 
 
-
+{% block head %}
+    <style>
+        .div_list{
+        height:50px;
+        background-color:#ccc; 
+        max-width:90%;
+        margin-top:10px;
+        display:flex;
+        }
+    </style>
+{% endblock head %}
 {% block content %}
     <script>
         function listtostring(payments){
             let newPayments;
             console.log(payments)
-            newPayments = payments[0][0] + ".=" + payments[0][1] ;
+            newPayments = payments[0][0] + ",=" + payments[0][1] ;
             for (let i = 1; i < payments.length - 1; i++){
-                newPayments = newPayements + ",=" + products[i][4] + ".=";
+                newPayments = newPayments + ",=" + products[i][4] + ".=";
                 }
             }
             document.cookie = "payments=" + newProducts;
             document.cookie = "paymentscommand=" + "{{number}}";
         };
+        function getpayments(){
+            let cookies = document.cookie.split("; ");
+            for (let cookie of cookies){
+                const [name, value] = cookie.split("=");
+                if (name === "payments"){
+                    let payments = value.split('.=')
+                    for (let i = 0; i < payments.length; i++){
+                        payments[i] = payments[i].split(',=')
+                    }
+                    return payments
+                }
+            }
+            return null
+        }
+        function addpayment(){
+            let input = document.querySelector("#inputtext")
+            let text = input.value
+            let input.value = ""
+            let payments = getpayments()
+            payments.push([text, ])
+            listtostring(payments)
+        }
+        function removepayment(){
+            let payments = getpayments()
+            let newPayments = []
+            for (let i = 0; i < payments.length; i++){
+                if 
+            }
+        }
     </script>
-    <div class="container-fluid" style="height:50px ;background-color:#ccc; max-width:90%; margin-top:10px; display:flex;">
-        <div style="text-align: center; width:200px; padding:15px">Tipo de pagament</div>
+    <div class="container-fluid div_list">
+        <div style="text-align: center; width:200px; padding:15px">Tipo de pagamento</div>
         <div style="text-align: center; width:200px; padding:15px">quantidade</div>
     </div>
     {% if pagmentson %}
     {% for pagment in pagments %}
-        <div class="container-fluid" style="height:50px ;background-color:#ccc; max-width:90%; margin-top:10px; display:flex;">
+        <div class="container-fluid div_list">
             <div style="text-align: center; width:300px; padding:15px">{{product.tipe}}</div>
             <div style="text-align: center; width:300px; padding:15px">{{product.quantity}}</div>
         </div>

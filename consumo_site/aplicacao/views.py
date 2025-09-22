@@ -374,6 +374,7 @@ def closecommand(request, number):
     if products != [""]:
         for i in products:
             price = price + (float(i[2].replace(",", ".")) * 100)
-    price = str(price / 100).split(".")
-    price = price[0] + "." + price[1][0:2]
+    if "." in price:
+        price = str(price / 100).split(".")
+        price = price[0] + "." + price[1][0:2]
     return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number, "price": price, "pagments": pagments})
