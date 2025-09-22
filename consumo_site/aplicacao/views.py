@@ -362,8 +362,11 @@ def closecommand(request, number):
         def __init__(self, tipe, quantity):
             self.tipe = tipe
             self.quantity = quantity
-    pagmentstemp = request.COOKIES['payment'].split(",=")
-    command = int(request.COOKIES['paymentscommand'])
+    try:
+        pagmentstemp = request.COOKIES['payment'].split(",=")
+        command = int(request.COOKIES['paymentscommand'])
+    except:
+        command = 0
     pagments = []
     if command == number:
         for i in pagmentstemp:
@@ -373,8 +376,9 @@ def closecommand(request, number):
     products = sendstr("PRODUCTSON,=" + str(number)).split(",=")
     if products != [""]:
         for i in products:
-            price = price + (float(i[2].replace(",", ".")) * 100)
-    if "." in price:
+            priceproduct = i.split("|")[2]
+            price = price + (float(priceproduct.replace(",", ".")) * 100)
+    if "." in str(price):
         price = str(price / 100).split(".")
         price = price[0] + "." + price[1][0:2]
     return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number, "price": price, "pagments": pagments})
