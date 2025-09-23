@@ -19,82 +19,121 @@
 {% endblock head %}
 {% block content %}
     <script>
-        function addpayment(){
-            let input = document.querySelector("#inputtext");
-            let price = input.value;
-            let input.value = "";
-            let payments = getpayments();
-            payments.push(["Dinheiro", price]);
-            
-            let maindiv = document.createElement("div");
-            maindiv.classList.add("div_list")
-            
-            let tipediv = document.createElement("div"); 
-            tipediv.classList.add("div_elementlist")
-            
-            let pricediv = document.createElement("div");
-            pricediv.classList.add("div_elementlist")
-
-
-            document.body.appendChild(maindiv);
-            maindiv.append(tipediv)
-            maindiv.append(pricediv)
-
-            listtostring(payments)
+        function setnumber(){
+            document.cookie = "savecommand=" + "{{number}}" + "; path=/commands";
         }
         function listtostring(payments){
             let newPayments;
+            console.log("antes de salvar")
             console.log(payments)
-            newPayments = payments[0][0] + ",=" + payments[0][1] ;
-            for (let i = 1; i < payments.length - 1; i++){
-                newPayments = newPayments + ",=" + products[i][4] + ".=";
-                }
-            document.cookie = "payments=" + newProducts;
-            document.cookie = "paymentscommand=" + "{{number}}"
-        }
+            newPayments = payments[0][0] + ",-" + payments[0][1] ;
+            console.log("adicionado " + payments[0][0] + "e " + payments[0][1])
+            for (let i = 1; i < payments.length; i++){
+                console.log("adicionado " + payments[i][0] + "e " + payments[i][1])
+                newPayments = newPayments + ".-" + payments[i][0] + ",-" + payments[i][1];
+            }
+            console.log("salvando")
+            console.log("payments=" + newPayments + "; path=/commands")
+            document.cookie = "payments=" + newPayments + "; path=/commands";
+            console.log("verificando comanda")
+            console.log(getpaymentscommand())
+            setnumber( )
+        };
         function getpayments(){
             let cookies = document.cookie.split("; ");
             for (let cookie of cookies){
+                console.log(cookie)
                 const [name, value] = cookie.split("=");
                 if (name === "payments"){
-                    let payments = value.split('.=')
+                    let payments = value.split('.-')
+                    
+                    console.log(payments)
                     for (let i = 0; i < payments.length; i++){
-                        payments[i] = payments[i].split(',=')
+                        payments[i] = payments[i].split(',-')
                     }
                     return payments
                 }
             }
             return null
+        };
+        function getpaymentscommand(){
+            let cookies = document.cookie.split("; ");
+            for (let cookie of cookies){
+                const [name, value] = cookie.split("=");
+                console.log(name)
+                console.log(value)
+                if (name === "savecommand"){
+                    console.log("encontrou numero")
+                    return value
+                }
+            }
+            return null
         }
+        function addpayment(){
+            let input = document.querySelector("#inputtext");
+            let price = input.value;
+            let payments = getpayments();
+            console.log("pegando o save")
+            console.log(payments)
+            console.log(getpaymentscommand())
+            console.log("{{number}}")
+            if (payments != null && getpaymentscommand() == "{{number}}"){
+                console.log("adicionando")
+                payments.push(["cartao", price]);
+                console.log(payments)
+            } else {
+                console.log("substituindo")
+                payments = [["cartao", price]];
+            }
+            console.log(payments)
+            let maindiv = document.createElement("div");
+            maindiv.classList.add("container_fluid");
+            maindiv.classList.add("div_list");
+            
+            let tipediv = document.createElement("div"); 
+            tipediv.classList.add("div_elementlist");
+            tipediv.innerHTML = "cartao";
+            
+            let pricediv = document.createElement("div");
+            pricediv.classList.add("div_elementlist");
+            pricediv.innerHTML = price;
+
+            document.body.appendChild(maindiv);
+            maindiv.append(tipediv);
+            maindiv.append(pricediv);
+
+            listtostring(payments);
+        };
         
         function removepayment(){
             let payments = getpayments();
             let newPayments = [];
             for (let i = 0; i < payments.length; i++){
-                if 
+
             }
-        }
+        };
     </script>
     <div class="container-fluid div_list">
         <div class="div_elementlist">Tipo de pagamento</div>
         <div class="div_elementlist">quantidade</div>
     </div>
-    {% if pagmentson %}
-    {% for pagment in pagments %}
-        <div class="container-fluid div_list">
-            <div class="div_elementlist">{{product.tipe}}</div>
-            <div class="div_elementlist">{{product.quantity}}</div>
-        </div>
-    {% endfor %}
-    {% endif %}
     <div class="" style="display:flex; width: 90%;height:80px; background-color:#ffffff; margin:auto; margin-bottom:5px">
         <form style="display:flex; height: 100%; width: auto; align-items: center; flex-grow: 1">
             <input id="inputtext" style="margin-right: 10px; flex-grow: 1; height: 35px;">
                 <h2>{{predeftext.text}}</h2>
             </input>
         </form>
-        <button style="height: 100%; width: 90px; height: 37px; margin-top: 21px" onclick="addpayment()">Adicionar</button>
+        <button style="height: 100%; width: 90px; height: 37px; margin-top: 21px" onclick='addpayment()'>Adicionar</button>
     </div>
+    {% if pagmentson %}
+    {% for pagment in pagments %}
+        <div class="container-fluid div_list">
+            <div class="div_elementlist">{{pagment.tipe}}</div>
+            <div class="div_elementlist">{{pagment.quantity}}</div>
+        </div>
+    {% endfor %}
+    {% endif %}
+    
     <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
         <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'neworder' number %}">Adicionar produto</a>
         

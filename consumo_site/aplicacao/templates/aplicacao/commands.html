@@ -4,7 +4,9 @@
 <script>
         function deletecookies(){
         document.cookie = "products=null; path=/commands"
-        }
+        document.cookie = "payments=null; path=/commands"
+        document.cookie = "paymentscommand=0; path=/commands"
+}
         deletecookies()
 </script>
 {% for command in commands %}

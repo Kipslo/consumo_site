@@ -363,22 +363,34 @@ def closecommand(request, number):
             self.tipe = tipe
             self.quantity = quantity
     try:
-        pagmentstemp = request.COOKIES['payment'].split(",=")
-        command = int(request.COOKIES['paymentscommand'])
-    except:
+        command = request.COOKIES['paymentscommand']
+        pagmentstemp = request.COOKIES['payments']
+        pagmentstemp = pagmentstemp.split(".-")
+        print(pagmentstemp)
+    except Exception as Error:
+        print(Error)
         command = 0
+    print(command)
     pagments = []
-    if command == number:
+    print(number)
+    print(command == number)
+    if int(command) == int(number):
+        print(pagmentstemp)
         for i in pagmentstemp:
-            tipe, quantity = i.split(".=")
+            tipe, quantity = i.split(",-")
+            print(tipe)
+            print(quantity)
             pagments.append(pagment(tipe, quantity))
     price = 0
     products = sendstr("PRODUCTSON,=" + str(number)).split(",=")
+    pagmentson = False
     if products != [""]:
+        pagmentson = True
         for i in products:
             priceproduct = i.split("|")[2]
             price = price + (float(priceproduct.replace(",", ".")) * 100)
     if "." in str(price):
         price = str(price / 100).split(".")
         price = price[0] + "." + price[1][0:2]
-    return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number, "price": price, "pagments": pagments})
+    print(pagments)
+    return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number, "price": price, "pagments": pagments, "pagmentson":pagmentson, "diferent":command == number})
