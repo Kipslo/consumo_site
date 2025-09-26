@@ -11,7 +11,7 @@ from django.contrib.auth.models import User as Userdata
 import socket
 
 
-PORT = 55261
+PORT = 54162
 def checklogin(request):
     temp = {"Y": True, "N": False}
     responseserver = sendstr(f"CHECKLOGIN,={request.user.username}")
@@ -363,20 +363,22 @@ def closecommand(request, number):
             self.tipe = tipe
             self.quantity = quantity
     try:
-        command = request.COOKIES['paymentscommand']
-        pagmentstemp = request.COOKIES['payments']
+        pagmentstemp = request.COOKIES['paymentslist']
         pagmentstemp = pagmentstemp.split(".-")
         print(pagmentstemp)
+        command = pagmentstemp[-1]
     except Exception as Error:
         print(Error)
-        command = 0
+        command = [0]
+    if command == "null":
+        command = [0]
     print(command)
     pagments = []
     print(number)
     print(command == number)
-    if int(command) == int(number):
+    if int(command[-1]) == int(number):
         print(pagmentstemp)
-        for i in pagmentstemp:
+        for i in pagmentstemp[0:-1]:
             tipe, quantity = i.split(",-")
             print(tipe)
             print(quantity)
