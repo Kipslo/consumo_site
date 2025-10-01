@@ -128,7 +128,7 @@
 
             const csrfInput = document.createElement('input');
             csrfInput.type = 'hidden';
-            csrfInput.name = 'csrfmiddlewaretoken'; // Ex: 'csrfmiddlewaretoken' (Django) ou '_token' (Laravel)
+            csrfInput.name = 'csrfmiddlewaretoken';
             csrfInput.value = csrftoken;
             form.appendChild(csrfInput);
             form.submit();
