@@ -351,6 +351,7 @@ def sendclient(request, number):
     print(sendstr(sendtext))
     return HttpResponseRedirect(reverse('index'))
 def closecommand(request, number):
+    print(request.method)
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('index'))
     if not checklogin(request):

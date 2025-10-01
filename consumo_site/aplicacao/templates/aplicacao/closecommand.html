@@ -44,7 +44,7 @@
                 }
             }
             return null*/
-        function getpayments(){
+        function getPayments(){
             let cookies = document.cookie.split("; ");
             for (let cookie of cookies){
                 const [name, value] = cookie.split("=");
@@ -59,12 +59,12 @@
             }
             return null
         };
-        function addpayment(){
+        function addPayment(){
             let input = document.querySelector("#inputtext");
             let price = input.value;
             let payments = [];
             let command = "0";
-            payments = getpayments();
+            payments = getPayments();
             if (payments != null){
                 if (payments[payments.length - 1] == "{{number}}"){
                     command = payments[payments.length - 1];
@@ -98,12 +98,40 @@
             listtostring(payments);
         };
         
-        function removepayment(){
+        function removePayment(){
             let payments = getpayments();
             let newPayments = [];
-            for (let i = 0; i < payments.length; i++){
-
+            //for (let i = 0; i < payments.length; i++){}
+        };
+        function getToken(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                    }
+                }
             }
+        return cookieValue;
+        };
+
+        function send() {
+            const csrftoken = getToken('csrftoken');
+             // Cria um novo elemento de formulário
+            let form = document.createElement('form');
+            document.body.appendChild(form);
+            form.method = 'post';
+            form.action = window.location.href;
+
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken'; // Ex: 'csrfmiddlewaretoken' (Django) ou '_token' (Laravel)
+            csrfInput.value = csrftoken;
+            form.appendChild(csrfInput);
+            form.submit();
         };
     </script>
     <div class="container-fluid div_list">
@@ -116,7 +144,7 @@
                 <h2>{{predeftext.text}}</h2>
             </input>
         </form>
-        <button style="height: 100%; width: 90px; height: 37px; margin-top: 21px" onclick='addpayment()'>Adicionar</button>
+        <button style="height: 100%; width: 90px; height: 37px; margin-top: 21px" onclick='addPayment()'>Adicionar</button>
     </div>
     {% if pagmentson %}
     {% for pagment in pagments %}
@@ -128,9 +156,9 @@
     {% endif %}
     
     <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
-        <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'neworder' number %}">Adicionar produto</a>
+        <button class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" onclick="send()">Lançar pagamento</button>
         
-        <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'addclient' number %}">Adicionar cliente</a>
+        <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'addclient' number %}">Fechar comanda</a>
     </nav>
 {% endblock content%}
 
