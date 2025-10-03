@@ -106,7 +106,7 @@
         function getToken(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
+            const cookies = document.cookie.split('; ');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
                 if (cookie.substring(0, name.length + 1) === (name + '=')) {
@@ -118,7 +118,7 @@
         return cookieValue;
         };
 
-        function send() {
+        function send(tipe) {
             const csrftoken = getToken('csrftoken');
              // Cria um novo elemento de formulário
             let form = document.createElement('form');
@@ -131,6 +131,12 @@
             csrfInput.name = 'csrfmiddlewaretoken';
             csrfInput.value = csrftoken;
             form.appendChild(csrfInput);
+
+            const tipeInput = document.createElement('input');
+            tipeInput.tipe = 'hidden';
+            tipeInput.name = 'postTipe';
+            tipeInput.value = tipe
+            form.appendChild(tipeInput)
             form.submit();
         };
     </script>
@@ -156,9 +162,9 @@
     {% endif %}
     
     <nav class="class=navbar fixed-bottom" style="background-color:#ccc; height:80px">
-        <button class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" onclick="send()">Lançar pagamento</button>
+        <button class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" onclick="send('SEND')">Lançar pagamento</button>
         
-        <a class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" href="{% url 'addclient' number %}">Fechar comanda</a>
+        <button class="btn btn-success btn-lg" style="max-width: 40%; max-height:80%; margin-top:15px; margin-left:20px" onclick="send('CLOSE')">Fechar comanda</button>
     </nav>
 {% endblock content%}
 

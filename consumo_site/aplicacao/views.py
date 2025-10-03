@@ -357,43 +357,47 @@ def closecommand(request, number):
     if not checklogin(request):
         logoutAuth(request)
         return HttpResponseRedirect(reverse("login"))
-    #if not checkpermission(request):
-    #    return HttpResponseRedirect(reverse('index'))
-    class pagment():
-        def __init__(self, tipe, quantity):
-            self.tipe = tipe
-            self.quantity = quantity
-    try:
-        pagmentstemp = request.COOKIES['paymentslist']
-        pagmentstemp = pagmentstemp.split(".-")
-        print(pagmentstemp)
-        command = pagmentstemp[-1]
-    except Exception as Error:
-        print(Error)
-        command = [0]
-    if command == "null":
-        command = [0]
-    print(command)
-    pagments = []
-    print(number)
-    print(command == number)
-    if int(command[-1]) == int(number):
-        print(pagmentstemp)
-        for i in pagmentstemp[0:-1]:
-            tipe, quantity = i.split(",-")
-            print(tipe)
-            print(quantity)
-            pagments.append(pagment(tipe, quantity))
-    price = 0
-    products = sendstr("PRODUCTSON,=" + str(number)).split(",=")
-    pagmentson = False
-    if products != [""]:
-        pagmentson = True
-        for i in products:
-            priceproduct = i.split("|")[2]
-            price = price + (float(priceproduct.replace(",", ".")) * 100)
-    if "." in str(price):
-        price = str(price / 100).split(".")
-        price = price[0] + "." + price[1][0:2]
-    print(pagments)
-    return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number, "price": price, "pagments": pagments, "pagmentson":pagmentson, "diferent":command == number})
+    if request.method == "POST":
+        postTipe = request.POST['postTipe']
+        print(postTipe)
+    else:
+        #if not checkpermission(request):
+        #    return HttpResponseRedirect(reverse('index'))
+        class pagment():
+            def __init__(self, tipe, quantity):
+                self.tipe = tipe
+                self.quantity = quantity
+        try:
+            pagmentstemp = request.COOKIES['paymentslist']
+            pagmentstemp = pagmentstemp.split(".-")
+            print(pagmentstemp)
+            command = pagmentstemp[-1]
+        except Exception as Error:
+            print(Error)
+            command = [0]
+        if command == "null":
+            command = [0]
+        print(command)
+        pagments = []
+        print(number)
+        print(command == number)
+        if int(command[-1]) == int(number):
+            print(pagmentstemp)
+            for i in pagmentstemp[0:-1]:
+                tipe, quantity = i.split(",-")
+                print(tipe)
+                print(quantity)
+                pagments.append(pagment(tipe, quantity))
+        price = 0
+        products = sendstr("PRODUCTSON,=" + str(number)).split(",=")
+        pagmentson = False
+        if products != [""]:
+            pagmentson = True
+            for i in products:
+                priceproduct = i.split("|")[2]
+                price = price + (float(priceproduct.replace(",", ".")) * 100)
+        if "." in str(price):
+            price = str(price / 100).split(".")
+            price = price[0] + "." + price[1][0:2]
+        print(pagments)
+        return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number, "price": price, "pagments": pagments, "pagmentson":pagmentson, "diferent":command == number})
