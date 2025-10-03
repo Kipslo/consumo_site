@@ -360,6 +360,12 @@ def closecommand(request, number):
     if request.method == "POST":
         postTipe = request.POST['postTipe']
         print(postTipe)
+        temp = request.COOKIE['paymentslist'].split(".-")
+        payments = []
+        for i in temp:
+            payments.append(i.split(",-"))
+        permission = sendstr(f"CLOSECOMMAND,={request.user.username},={postTipe}")
+        
     else:
         #if not checkpermission(request):
         #    return HttpResponseRedirect(reverse('index'))
