@@ -325,6 +325,7 @@ def sendorder(request, number):
             result = sendstr(strforsend)
             if result != "Y":
                 end = result
+        print(end)
         if end == 0:
             return HttpResponseRedirect(reverse('index'))
         
