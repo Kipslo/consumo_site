@@ -360,12 +360,23 @@ def closecommand(request, number):
     if request.method == "POST":
         postTipe = request.POST['postTipe']
         print(postTipe)
-        temp = request.COOKIE['paymentslist'].split(".-")
+        temp = request.COOKIES['paymentslist'].split(".-")
         payments = []
-        for i in temp:
+        for i in temp[0:-1]:
             payments.append(i.split(",-"))
-        permission = sendstr(f"CLOSECOMMAND,={request.user.username},={postTipe}")
-        
+        print(payments)
+        print(temp[-1])
+        if int(temp[-1]) == int(number):
+            print("aqui")
+            textforsend = f"CLOSECOMMAND,={request.user.username},={postTipe},={number}"
+            for i in payments:
+                textforsend = textforsend + f",={i[0]}.={i[1]}"
+            permission = sendstr(textforsend)
+            print(permission)
+        if permission == "Y":
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return render(request, "aplicacao/navbar.html", {"navname": permission})
     else:
         #if not checkpermission(request):
         #    return HttpResponseRedirect(reverse('index'))
@@ -394,16 +405,18 @@ def closecommand(request, number):
                 print(tipe)
                 print(quantity)
                 pagments.append(pagment(tipe, quantity))
-        price = 0
+        
+        totalPrice = 0
         products = sendstr("PRODUCTSON,=" + str(number)).split(",=")
         pagmentson = False
+        
         if products != [""]:
             pagmentson = True
             for i in products:
                 priceproduct = i.split("|")[2]
-                price = price + (float(priceproduct.replace(",", ".")) * 100)
-        if "." in str(price):
-            price = str(price / 100).split(".")
-            price = price[0] + "." + price[1][0:2]
+                totalPrice = totalPrice + (float(priceproduct.replace(",", ".")) * 100)
+        if "." in str(totalPrice):
+            totalPrice = str(totalPrice / 100).split(".")
+            totalPrice = totalPrice[0] + "." + totalPrice[1][0:2]
         print(pagments)
-        return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number, "price": price, "pagments": pagments, "pagmentson":pagmentson, "diferent":command == number})
+        return render(request, "aplicacao/closecommand.html", {"navname": f"Fechar Comanda ({number})", "number": number, "pagments": pagments, "pagmentson":pagmentson, "diferent":command == number, "totalPrice":totalPrice})
