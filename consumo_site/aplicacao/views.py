@@ -374,13 +374,11 @@ def closecommand(request, number):
                 textforsend = textforsend + f",={i[0]}.={i[1]}"
             permission = sendstr(textforsend)
             print(permission)
-        if permission == "Y":
-            return HttpResponseRedirect(reverse('index'))
-        else:
-            return render(request, "aplicacao/navbar.html", {"navname": permission})
+        #if permission == "Y":
+        return HttpResponseRedirect(reverse('index'))
+        #else:
+            #return render(request, "aplicacao/navbar.html", {"navname": permission})
     else:
-        #if not checkpermission(request):
-        #    return HttpResponseRedirect(reverse('index'))
         class pagment():
             def __init__(self, tipe, quantity):
                 self.tipe = tipe
