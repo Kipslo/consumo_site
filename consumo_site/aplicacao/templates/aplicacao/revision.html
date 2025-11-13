@@ -1,8 +1,10 @@
 {% extends "aplicacao/navbar.html" %}
+{% load static %}
 {% block division %}
     <a class="menuitem" href="{% url 'divisionpage' number %}">Dividir</a>
 {% endblock division %}
 {% block content %}
+    <script src="{% static 'js/products.js' %}"></script>
     <script>
         function getcookie(){
             let cookies = document.cookie.split("; ");
@@ -78,7 +80,7 @@
                     <button onclick="addorremove1(1, '{{product.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; border: 3px solid black">Adicionar 1</button>
                     <button onclick="addorremove1(-1, '{{product.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; border: 3px solid black">diminuir 1</button>
                     <a href="{% url 'edittext' number product.cod %}" style="display:block; width:80%; text-align:center; height:100px; border: 3px solid black; cursor:pointer; text-decoration:none; color:black; padding-top:34px">Editar</a>
-                    <button onclick="deleteproduct('{{product.cod}}', '{{product.htmlcod}}')" style="display:block; width:80%; text-align:center; height:100px; border: 3px solid black">Excluir</button>
+                    <button onclick="deleteProduct('{{product.cod}}')" style="display:block; width:80%; text-align:center; height:100px; border: 3px solid black">Excluir</button>
                 </div>
             </div>
         {% endfor %}

@@ -1,56 +1,14 @@
 {% extends "aplicacao/navbar.html" %}
+{% load static %}
 {% block content %}
+<script src="{% static 'js/products.js' %}"></script>
 <script>
-    function listtostring(products){
-            let newProducts;
-            console.log(products)
-            newProducts =products[0][0] + ",-" + products[0][1] + ",-" + products[0][2] + ",-" + products[0][3] + ",-" + products[0][4] + ",-" + products[0][5] ;
-            if (products[0][6].length === 0){
-                newProducts = newProducts + ",-|"
-            } else {
-                newProducts = newProducts + ",-" + products[0][6][0] 
-                for (let i = 1; i < products[0][6].length; i++){
-                    newProducts = newProducts + ".-" + products[0][6][i]
-                }
-                newProducts = newProducts + "|"
-            }
-            for (let i = 1; i < products.length - 1; i++){
-                newProducts = newProducts + products[i][0] + ",-" + products[i][1] + ",-" + products[i][2] + ",-" + products[i][3] + ",-" + products[i][4] + ",-" + products[i][5] + ",-" ;
-                if ((products[i][6] === "" && products[i][6].length === 1)|| products[i][6].length === 0){
-                    newProducts = newProducts + "|";
-                } else {
-                    newProducts = newProducts + products[i][6][0];
-                    for (let j = 1; j < products[i][6].length; j++ ){
-                        newProducts = newProducts + ".-" +  products[i][6][j];
-                    }
-                    newProducts = newProducts + "|";
-                }
-            }
-            newProducts = newProducts + products[products.length - 1] + "; path=/commands";
-            document.cookie = "products=" + newProducts;
-        };
-    function getproducts(){
-            let cookies = document.cookie.split("; ");
-            for (let cookie of cookies){
-                const [name, value] = cookie.split("=");
-                if (name === "products"){
-                    let products = value.split("|");
-                    for (let i = 0; i < products.length - 1; i++){
-                        products[i] = products[i].split(",-");
-                        products[i][6] = products[i][6].split(".-");
-                    }
-                    console.log(products)
-                    return products
-                }
-            }
-            return null
-    }
+    
     function addtext(){
-        let listen = getproducts()
-        let text = document.querySelector("#inputtext").value
-        console.log(listen['{{indexofproduct}}'])
-        let textlisten = listen['{{indexofproduct}}'][6]
-        let permission = true
+        let listen = getProducts();
+        let text = document.querySelector("#inputtext").value;
+        let textlisten = listen['{{indexofproduct}}'][6];
+        let permission = true;
         for(let i = 0; i < listen['{{indexofproduct}}'][6].length; i++){
             if (text === listen['{{indexofproduct}}'][6][i]){
                 permission = false
@@ -66,11 +24,11 @@
         }
         console.log(textlisten)
         listen['{{indexofproduct}}'][6] = textlisten
-        listtostring(listen)
+        saveProducts(listen)
         location.reload()
     }
     function removetext(text){
-        let listen = getproducts()
+        let listen = getProducts()
         let textlisten = []
         for(let i = 0; i < listen['{{indexofproduct}}'][6].length; i++){
             if (text !== listen['{{indexofproduct}}'][6][i] && listen['{{indexofproduct}}'][6][i] !== ""){
@@ -78,12 +36,12 @@
             }
         }
         listen['{{indexofproduct}}'][6] = textlisten
-        listtostring(listen)
+        saveProducts(listen)
         location.reload()
     }
     function changetext(text, index){
         let checkbox = document.querySelectorAll(".checkbox")[index];
-        let listen = getproducts();
+        let listen = getProducts();
         if (checkbox.checked){
             if (listen['{{indexofproduct}}'][6][0] === "" || listen['{{indexofproduct}}'][6].length === 0){
                 listen['{{indexofproduct}}'][6][0] = text;
@@ -99,7 +57,7 @@
             }
             listen['{{indexofproduct}}'][6] = textlisten
         }
-        listtostring(listen)
+        saveProducts(listen)
         
     }
 </script>
