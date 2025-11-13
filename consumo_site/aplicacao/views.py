@@ -304,6 +304,7 @@ def sendorder(request, number):
     print(products)
     for i, j in enumerate(products[:-1]):
         products[i] = j.split(',-') 
+        print(products)
         products[i][6] = products[i][6].split(".-")
     products[-1] = products[-1].split(',-')
     username = request.user.username

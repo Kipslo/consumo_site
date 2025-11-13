@@ -42,7 +42,7 @@
                     newProducts = newProducts + ",-" + products[products.length - 1][i]
                 }
                      
-                newProducts = newProducts + "; path=/commands";
+                newProducts = newProducts + "|" + number + "; path=/commands";
                 console.log(newProducts)
                 document.cookie = "products=" + newProducts
             }

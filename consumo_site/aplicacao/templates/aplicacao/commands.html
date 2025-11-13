@@ -3,6 +3,7 @@
 {% block content %}
 <script>
         function deletecookies(){
+        document.cookie = "products=null; path=/commands"
         document.cookie = "paymentscommand=null; path=/commands"
         document.cookie = "paymentslist=null; path=/commands"
 }
@@ -10,9 +11,9 @@
 </script>
 {% for command in commands %}
     {% if command.occupied %}
-            <a href="{% url 'command' command.number %}" class="btn btn-danger btn-lg"  style="color:#ffffff; margin-top:3px">{{command.text}}</a>
+            <a href="{% url 'command' command.number %}" class="btn btn-danger btn-lg"  style="color:#ffffff; margin-top:3px; width: 120px; height: 60px">{{command.text}}</a>
     {% else %}
-            <a href="{% url 'command' command.number %}"  class="btn btn-success btn-lg" style="color:#ffffff; margin-top:3px">{{command.text}}</a>
+            <a href="{% url 'command' command.number %}"  class="btn btn-success btn-lg" style="color:#ffffff; margin-top:3px; width: 120px; height: 60px">{{command.text}}</a>
     {% endif %}
 {% endfor %}
 {% endblock content %}
